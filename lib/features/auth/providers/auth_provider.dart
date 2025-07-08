@@ -13,6 +13,13 @@ class Auth extends _$Auth {
   }
 
   void login({required String email, required String password}) {
+    if (!email.contains('@') || password.length < 6) {
+      state = state.copyWith(
+        authStatus: AuthStatus.notAuthenticated,
+        errorMessage: 'Correo o contraseña inválidos',
+      );
+      return;
+    }
     final role = email.contains('admin') ? UserRole.admin : UserRole.stage1;
 
     state = state.copyWith(
