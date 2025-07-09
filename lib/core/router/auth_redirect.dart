@@ -30,7 +30,9 @@ String? authRedirect(Ref ref, GoRouterState state) {
   };
 
   final requiredRole = routeRoles[path];
-  if (requiredRole != null && user?.role != requiredRole) {
+  if (requiredRole != null &&
+      user?.role != requiredRole &&
+      user?.role != UserRole.admin) {
     return '/projects';
   }
 
