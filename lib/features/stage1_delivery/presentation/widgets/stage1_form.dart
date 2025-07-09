@@ -5,25 +5,36 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
+import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/core/services/image_picker_service_provider.dart';
 import 'package:registro_panela/features/auth/domin/authenticated_user.dart';
 import 'package:registro_panela/features/auth/providers/auth_provider.dart';
-import 'package:registro_panela/features/stage1_delivery/domin/gavera_data.dart';
 import 'package:registro_panela/features/stage1_delivery/domin/stage1_form_data.dart';
 import 'package:registro_panela/features/stage1_delivery/presentation/widgets/app_form_text_fild.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_form_provider.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class Stage1Form extends ConsumerStatefulWidget {
-  const Stage1Form({super.key});
+  final Stage1FormData? initialData;
+  const Stage1Form({this.initialData, super.key});
 
   @override
   ConsumerState<Stage1Form> createState() => _Stage1FormState();
 }
 
 class _Stage1FormState extends ConsumerState<Stage1Form> {
-  final _formKey = GlobalKey<FormBuilderState>();
-  final List<int> _gaveras = [0];
+  late final GlobalKey<FormBuilderState> _formKey;
+  late final List<int> _gaveras;
   String? _fotoPath;
+
+  @override
+  void initState() {
+    super.initState();
+    _formKey = GlobalKey<FormBuilderState>();
+    _gaveras = widget.initialData?.gaveras.asMap().keys.toList() ?? [0];
+    _fotoPath = widget.initialData?.photoPath;
+  }
 
   void _addGavera() {
     setState(() {
@@ -49,8 +60,11 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
 
   @override
   Widget build(BuildContext context) {
+    final initial = widget.initialData;
+    final uuid = Uuid();
     final state = ref.watch(stage1FormProvider);
     final user = ref.read(authProvider).user;
+    final notifier = ref.read(stage1ProjectsProvider.notifier);
     return Column(
       children: [
         if (state.status == Stage1FormStatus.error)
@@ -66,10 +80,29 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
         FormBuilder(
           key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          initialValue: initial == null
+              ? {}
+              : {
+                  'name': initial.name,
+                  'basketsQuantity': initial.basketsQuantity.toString(),
+                  'preservativesWeight': initial.preservativesWeight.toString(),
+                  'preservativesJars': initial.preservativesJars.toString(),
+                  'limeWeight': initial.limeWeight.toString(),
+                  'limeJars': initial.limeJars.toString(),
+                  'phone': initial.phone,
+                  ...{
+                    for (int i = 0; i < initial.gaveras.length; i++)
+                      'gaverasCantidad_$i': initial.gaveras[i].quantity
+                          .toString(),
+                    for (var i = 0; i < initial.gaveras.length; i++)
+                      'gaverasPeso_$i': initial.gaveras[i].referenceWeight
+                          .toString(),
+                  },
+                },
           child: Column(
             children: [
               AppFormTextFild(
-                name: 'nombre',
+                name: 'name',
                 label: 'Nombre molienda',
                 validator: FormBuilderValidators.required(),
               ),
@@ -136,7 +169,7 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
                 children: [
                   Expanded(
                     child: AppFormTextFild(
-                      name: 'canastillaCantidad',
+                      name: 'basketsQuantity',
                       label: 'Cantidad canastillas',
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
@@ -150,21 +183,21 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
               ),
               const SizedBox(height: 16),
               TwoFormsRow(
-                nameFirst: 'conservantesPeso',
+                nameFirst: 'preservativesWeight',
                 labeFirst: 'Conservantes (kg)',
                 labeSecond: 'Tarros de conservantes',
-                nameSecond: 'conservantesTarros',
+                nameSecond: 'preservativesJars',
               ),
               const SizedBox(height: 16),
               TwoFormsRow(
-                nameFirst: 'calPeso',
+                nameFirst: 'limeWeight',
                 labeFirst: 'Cal (kg)',
                 labeSecond: 'Tarros de cal',
-                nameSecond: 'calTarros',
+                nameSecond: 'limeJars',
               ),
               const SizedBox(height: 16),
               AppFormTextFild(
-                name: 'telefono',
+                name: 'phone',
                 label: 'Teléfono',
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(),
@@ -173,11 +206,6 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
                   FormBuilderValidators.minLength(10),
                 ]),
                 keyboardType: TextInputType.phone,
-              ),
-              FormBuilderDateTimePicker(
-                name: 'fecha',
-                decoration: const InputDecoration(labelText: 'Fecha'),
-                validator: FormBuilderValidators.required(),
               ),
               const SizedBox(height: 20),
               Row(
@@ -203,10 +231,11 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
               ElevatedButton(
                 onPressed: state.status == Stage1FormStatus.submitting
                     ? null
-                    : () {
+                    : () async {
                         final isValid =
                             _formKey.currentState?.saveAndValidate() ?? false;
                         if (!isValid) return;
+
                         final values = _formKey.currentState!.value;
                         final gaveras = <GaveraData>[];
                         for (int i = 0; i < _gaveras.length; i++) {
@@ -220,30 +249,34 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
                               0.0;
                           gaveras.add(
                             GaveraData(
-                              cantidad: cantidad,
-                              pesoReferencia: peso,
+                              quantity: cantidad,
+                              referenceWeight: peso,
                             ),
                           );
                         }
                         final data = Stage1FormData(
-                          nombre: values['nombre'],
+                          id: widget.initialData?.id ?? uuid.v4(),
+                          name: values['name'],
                           gaveras: gaveras,
-                          canastillasCantidad: int.parse(
-                            values['canastillaCantidad'] ?? 0,
+                          basketsQuantity: int.parse(values['basketsQuantity']),
+                          preservativesWeight: double.parse(
+                            values['preservativesWeight'],
                           ),
-                          conservantesPeso: double.parse(
-                            values['conservantesPeso'] ?? 0.0,
+                          preservativesJars: int.parse(
+                            values['preservativesJars'],
                           ),
-                          conservantesTarros: int.parse(
-                            values['conservantesTarros'] ?? 0,
-                          ),
-                          calPeso: double.parse(values['calPeso'] ?? 0),
-                          calTarros: int.parse(values['calTarros'] ?? 0),
-                          telefono: values['telefono'],
-                          fecha: values['fecha'],
-                          fotoPath: _fotoPath,
+                          limeWeight: double.parse(values['limeWeight']),
+                          limeJars: int.parse(values['limeJars']),
+                          phone: values['phone'],
+                          date: initial?.date ?? DateTime.now(),
+                          photoPath: _fotoPath,
                         );
                         ref.read(stage1FormProvider.notifier).submit(data);
+                        if (widget.initialData == null) {
+                          notifier.add(data);
+                        } else {
+                          notifier.update(data);
+                        }
                         if (user?.role != UserRole.admin) {
                           _formKey.currentState?.reset();
                           setState(() {
@@ -270,7 +303,7 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
                             ),
                           );
                           Future.delayed(const Duration(milliseconds: 600), () {
-                            if (mounted) context.go('/projects');
+                            if (mounted) context.go(Routes.projects);
                           });
                         }
                       },

@@ -8,30 +8,43 @@ part of 'stage1_form_data.dart';
 
 _Stage1FormData _$Stage1FormDataFromJson(Map<String, dynamic> json) =>
     _Stage1FormData(
-      nombre: json['nombre'] as String,
+      id: json['id'] as String,
+      name: json['name'] as String,
       gaveras: (json['gaveras'] as List<dynamic>)
           .map((e) => GaveraData.fromJson(e as Map<String, dynamic>))
           .toList(),
-      canastillasCantidad: (json['canastillasCantidad'] as num).toInt(),
-      conservantesPeso: (json['conservantesPeso'] as num).toDouble(),
-      conservantesTarros: (json['conservantesTarros'] as num).toInt(),
-      calPeso: (json['calPeso'] as num).toDouble(),
-      calTarros: (json['calTarros'] as num).toInt(),
-      telefono: json['telefono'] as String,
-      fecha: DateTime.parse(json['fecha'] as String),
-      fotoPath: json['fotoPath'] as String?,
+      basketsQuantity: (json['basketsQuantity'] as num).toInt(),
+      preservativesWeight: (json['preservativesWeight'] as num).toDouble(),
+      preservativesJars: (json['preservativesJars'] as num).toInt(),
+      limeWeight: (json['limeWeight'] as num).toDouble(),
+      limeJars: (json['limeJars'] as num).toInt(),
+      phone: json['phone'] as String,
+      date: DateTime.parse(json['date'] as String),
+      photoPath: json['photoPath'] as String?,
     );
 
 Map<String, dynamic> _$Stage1FormDataToJson(_Stage1FormData instance) =>
     <String, dynamic>{
-      'nombre': instance.nombre,
+      'id': instance.id,
+      'name': instance.name,
       'gaveras': instance.gaveras,
-      'canastillasCantidad': instance.canastillasCantidad,
-      'conservantesPeso': instance.conservantesPeso,
-      'conservantesTarros': instance.conservantesTarros,
-      'calPeso': instance.calPeso,
-      'calTarros': instance.calTarros,
-      'telefono': instance.telefono,
-      'fecha': instance.fecha.toIso8601String(),
-      'fotoPath': instance.fotoPath,
+      'basketsQuantity': instance.basketsQuantity,
+      'preservativesWeight': instance.preservativesWeight,
+      'preservativesJars': instance.preservativesJars,
+      'limeWeight': instance.limeWeight,
+      'limeJars': instance.limeJars,
+      'phone': instance.phone,
+      'date': instance.date.toIso8601String(),
+      'photoPath': instance.photoPath,
+    };
+
+_GaveraData _$GaveraDataFromJson(Map<String, dynamic> json) => _GaveraData(
+  quantity: (json['quantity'] as num).toInt(),
+  referenceWeight: (json['referenceWeight'] as num).toDouble(),
+);
+
+Map<String, dynamic> _$GaveraDataToJson(_GaveraData instance) =>
+    <String, dynamic>{
+      'quantity': instance.quantity,
+      'referenceWeight': instance.referenceWeight,
     };

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/features/auth/providers/auth_provider.dart';
 import 'package:registro_panela/features/auth/providers/login_form_provider.dart';
 
@@ -32,7 +33,7 @@ class LoginForm extends ConsumerWidget {
                     ref
                         .read(authProvider.notifier)
                         .login(email: form.email, password: form.password);
-                    context.go('/projects');
+                    context.go(Routes.projects);
                   }
                 : null,
             child: const Text('Iniciar sesión'),

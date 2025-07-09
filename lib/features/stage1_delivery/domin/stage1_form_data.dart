@@ -1,24 +1,35 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:registro_panela/features/stage1_delivery/domin/gavera_data.dart';
 
 part 'stage1_form_data.freezed.dart';
 part 'stage1_form_data.g.dart';
 
 @freezed
 abstract class Stage1FormData with _$Stage1FormData {
-  factory Stage1FormData({
-    required String nombre,
+  const factory Stage1FormData({
+    required String id,
+    required String name,
     required List<GaveraData> gaveras,
-    required int canastillasCantidad,
-    required double conservantesPeso,
-    required int conservantesTarros,
-    required double calPeso,
-    required int calTarros,
-    required String telefono,
-    required DateTime fecha,
-    String? fotoPath,
+    required int basketsQuantity,
+    required double preservativesWeight,
+    required int preservativesJars,
+    required double limeWeight,
+    required int limeJars,
+    required String phone,
+    required DateTime date,
+    String? photoPath,
   }) = _Stage1FormData;
 
   factory Stage1FormData.fromJson(Map<String, dynamic> json) =>
       _$Stage1FormDataFromJson(json);
+}
+
+@freezed
+abstract class GaveraData with _$GaveraData {
+  const factory GaveraData({
+    required int quantity,
+    required double referenceWeight,
+  }) = _GaveraData;
+
+  factory GaveraData.fromJson(Map<String, dynamic> json) =>
+      _$GaveraDataFromJson(json);
 }
