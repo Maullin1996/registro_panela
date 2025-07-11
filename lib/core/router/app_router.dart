@@ -6,6 +6,7 @@ import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/features/auth/presentation/login_page.dart';
 import 'package:registro_panela/features/project_selector/presentation/project_selector_page.dart';
 import 'package:registro_panela/features/stage1_delivery/presentation/stage1_page.dart';
+import 'package:registro_panela/features/stage2_load/presentation/stage2_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = GoRouterNotifier(ref);
@@ -22,8 +23,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, __) => const ProjectSelectorPage(),
       ),
       GoRoute(
-        path: Routes.stage1,
-        builder: (context, state) => const Stage1Page(),
+        name: 'stage1',
+        path: '${Routes.stage1}/:projectId',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage1Page(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage2Detail',
+        path: '${Routes.stage2}/:projectId',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage2Page(projectId: projectId);
+        },
       ),
     ],
   );

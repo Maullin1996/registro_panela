@@ -9,6 +9,7 @@ class AppFormTextFild extends StatelessWidget {
   final bool obscureText;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final void Function(String?)? onChanged;
 
   const AppFormTextFild({
     super.key,
@@ -19,6 +20,7 @@ class AppFormTextFild extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType,
     this.validator,
+    this.onChanged,
   });
 
   @override
@@ -35,6 +37,7 @@ class AppFormTextFild extends StatelessWidget {
       keyboardType: keyboardType,
       validator: validator,
       style: Theme.of(context).textTheme.bodyMedium,
+      onChanged: onChanged,
     );
   }
 }

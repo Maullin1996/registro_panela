@@ -1,13 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:registro_panela/features/stage1_delivery/domin/stage1_form_data.dart';
-import 'package:uuid/uuid.dart';
-
-final _uuid = Uuid();
 
 final stage1ProjectsMockProvider = Provider<List<Stage1FormData>>((ref) {
   return [
     Stage1FormData(
-      id: _uuid.v4(),
+      id: '1',
       name: 'La Esperanza',
       gaveras: [
         GaveraData(quantity: 8, referenceWeight: 950),
@@ -23,7 +20,7 @@ final stage1ProjectsMockProvider = Provider<List<Stage1FormData>>((ref) {
       photoPath: null,
     ),
     Stage1FormData(
-      id: _uuid.v4(),
+      id: '2',
       name: 'Don Carlos',
       gaveras: [
         GaveraData(quantity: 8, referenceWeight: 500),

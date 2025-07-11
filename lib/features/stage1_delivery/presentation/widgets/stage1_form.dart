@@ -4,20 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:go_router/go_router.dart';
-import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/core/services/image_picker_service_provider.dart';
-import 'package:registro_panela/features/auth/domin/authenticated_user.dart';
-import 'package:registro_panela/features/auth/providers/auth_provider.dart';
 import 'package:registro_panela/features/stage1_delivery/domin/stage1_form_data.dart';
-import 'package:registro_panela/features/stage1_delivery/presentation/widgets/app_form_text_fild.dart';
+import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_form_provider.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class Stage1Form extends ConsumerStatefulWidget {
   final Stage1FormData? initialData;
-  const Stage1Form({this.initialData, super.key});
+  final bool isNew;
+  const Stage1Form({required this.isNew, this.initialData, super.key});
 
   @override
   ConsumerState<Stage1Form> createState() => _Stage1FormState();
@@ -61,10 +57,15 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
   @override
   Widget build(BuildContext context) {
     final initial = widget.initialData;
+
     final uuid = Uuid();
+
     final state = ref.watch(stage1FormProvider);
-    final user = ref.read(authProvider).user;
-    final notifier = ref.read(stage1ProjectsProvider.notifier);
+
+    final isNew = widget.isNew;
+
+    final formNotifier = ref.read(stage1FormProvider.notifier);
+
     return Column(
       children: [
         if (state.status == Stage1FormStatus.error)
@@ -271,41 +272,7 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
                           date: initial?.date ?? DateTime.now(),
                           photoPath: _fotoPath,
                         );
-                        ref.read(stage1FormProvider.notifier).submit(data);
-                        if (widget.initialData == null) {
-                          notifier.add(data);
-                        } else {
-                          notifier.update(data);
-                        }
-                        if (user?.role != UserRole.admin) {
-                          _formKey.currentState?.reset();
-                          setState(() {
-                            _gaveras.clear();
-                            _gaveras.add(0);
-                            _fotoPath = null;
-                          });
-                        }
-                        if (user?.role == UserRole.admin) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                '¡Datos guardados! Como admin, puedes revisar otras etapas.',
-                              ),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                '¡Datos guardados!',
-                                style: TextStyle(color: Colors.green),
-                              ),
-                            ),
-                          );
-                          Future.delayed(const Duration(milliseconds: 600), () {
-                            if (mounted) context.go(Routes.projects);
-                          });
-                        }
+                        formNotifier.submit(data, isNew: isNew);
                       },
                 child: state.status == Stage1FormStatus.submitting
                     ? const CircularProgressIndicator()
