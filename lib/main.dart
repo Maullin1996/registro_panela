@@ -16,7 +16,9 @@ class MainApp extends ConsumerWidget {
       title: 'Registro Panela',
       routerConfig: router,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 153, 209, 255),
+        ),
         useMaterial3: true,
       ),
     );

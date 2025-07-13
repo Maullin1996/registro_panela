@@ -7,6 +7,9 @@ import 'package:registro_panela/features/auth/presentation/login_page.dart';
 import 'package:registro_panela/features/project_selector/presentation/project_selector_page.dart';
 import 'package:registro_panela/features/stage1_delivery/presentation/stage1_page.dart';
 import 'package:registro_panela/features/stage2_load/presentation/stage2_page.dart';
+import 'package:registro_panela/features/stage3_weigh/presentation/stage3_form_page.dart';
+import 'package:registro_panela/features/stage3_weigh/presentation/stage3_page.dart';
+import 'package:registro_panela/features/stage3_weigh/presentation/stage3_page_summary.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = GoRouterNotifier(ref);
@@ -36,6 +39,32 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final projectId = state.pathParameters['projectId']!;
           return Stage2Page(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage3Detail',
+        path: '${Routes.stage3}/:projectId',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage3Page(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage3Form',
+        path: '${Routes.stage3}/:projectId/:load2Id/form',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          final load2Id = state.pathParameters['load2Id']!;
+          return Stage3FormPage(projectId: projectId, load2Id: load2Id);
+        },
+      ),
+      GoRoute(
+        name: 'stage3Summary',
+        path: '${Routes.stage3}/:projectId/:load2Id/summary',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          final load2Id = state.pathParameters['load2Id']!;
+          return Stage3PageSummary(load2Id: load2Id, projectId: projectId);
         },
       ),
     ],

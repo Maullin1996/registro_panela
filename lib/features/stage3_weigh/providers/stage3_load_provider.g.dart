@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'stage1_form_provider.dart';
+part of 'stage3_load_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$stage1FormHash() => r'd622c1540fff74fcbf7fdef15cb38d0e3f419def';
+String _$stage3LoadHash() => r'5b2379371057113b0faa8bdfcff763f182730bd6';
 
-/// See also [Stage1Form].
-@ProviderFor(Stage1Form)
-final stage1FormProvider =
-    AutoDisposeNotifierProvider<Stage1Form, Stage1FormState>.internal(
-      Stage1Form.new,
-      name: r'stage1FormProvider',
+/// See also [Stage3Load].
+@ProviderFor(Stage3Load)
+final stage3LoadProvider =
+    AutoDisposeNotifierProvider<Stage3Load, List<Stage3FormData>>.internal(
+      Stage3Load.new,
+      name: r'stage3LoadProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$stage1FormHash,
+          : _$stage3LoadHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$Stage1Form = AutoDisposeNotifier<Stage1FormState>;
+typedef _$Stage3Load = AutoDisposeNotifier<List<Stage3FormData>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

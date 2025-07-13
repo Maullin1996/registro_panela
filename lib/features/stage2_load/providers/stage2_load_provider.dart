@@ -8,7 +8,7 @@ part 'stage2_load_provider.g.dart';
 @riverpod
 class Stage2Load extends _$Stage2Load {
   @override
-  List<Stage2LoadData> build() => stage2LoadsMock(ref);
+  List<Stage2LoadData> build() => ref.read(stage2ProjectMockProvider);
 
   void add(Stage2LoadData load) {
     state = [load, ...state];
