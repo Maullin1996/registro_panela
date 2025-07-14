@@ -10,6 +10,9 @@ import 'package:registro_panela/features/stage2_load/presentation/stage2_page.da
 import 'package:registro_panela/features/stage3_weigh/presentation/stage3_form_page.dart';
 import 'package:registro_panela/features/stage3_weigh/presentation/stage3_page.dart';
 import 'package:registro_panela/features/stage3_weigh/presentation/stage3_page_summary.dart';
+import 'package:registro_panela/features/stage4_recollection/presentation/stage4_load_form_page.dart';
+import 'package:registro_panela/features/stage4_recollection/presentation/stage4_page.dart';
+import 'package:registro_panela/features/stage4_recollection/providers/stage4_load_provider.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = GoRouterNotifier(ref);
@@ -65,6 +68,38 @@ final routerProvider = Provider<GoRouter>((ref) {
           final projectId = state.pathParameters['projectId']!;
           final load2Id = state.pathParameters['load2Id']!;
           return Stage3PageSummary(load2Id: load2Id, projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage4Detail',
+        path: '${Routes.stage4}/:projectId',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage4Page(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage4Form',
+        path: '${Routes.stage4}/:projectId/new',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage4LoadFormPage(projectId: projectId, isNew: true);
+        },
+      ),
+      GoRoute(
+        name: 'stage4FormEdit',
+        path: '${Routes.stage4}/:projectId/:returnId/edit',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          final returnId = state.pathParameters['returnId']!;
+          final data = ref
+              .read(stage4LoadProvider)
+              .firstWhere((r) => r.id == returnId);
+          return Stage4LoadFormPage(
+            projectId: projectId,
+            initialData: data,
+            isNew: false,
+          );
         },
       ),
     ],

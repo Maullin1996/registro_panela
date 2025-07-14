@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
 import 'package:registro_panela/features/stage2_load/presentation/widgets/stage2_load_form.dart';
+import 'package:registro_panela/features/stage2_load/providers/stage2_load_form_provider.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_provider.dart';
 
 class Stage2Page extends ConsumerWidget {
@@ -14,6 +15,20 @@ class Stage2Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(stage2FormProvider, (previous, next) {
+      if (previous?.status == Stage2FormStatus.submitting &&
+          next.status == Stage2FormStatus.success) {
+        context.pop();
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Cargue registrado')));
+      }
+      if (next.status == Stage2FormStatus.error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.errorMessage ?? 'Error al guardar')),
+        );
+      }
+    });
     final project = ref
         .watch(stage1ProjectsProvider)
         .firstWhereOrNull((p) => p.id == projectId);
@@ -60,7 +75,7 @@ class Stage2Page extends ConsumerWidget {
                                 context: context,
                                 isScrollControlled: true,
                                 builder: (_) => Padding(
-                                  padding: MediaQuery.of(context).viewInsets,
+                                  padding: MediaQuery.viewInsetsOf(context),
                                   child: Stage2LoadForm(
                                     project: project,
                                     initialData: load,
@@ -115,7 +130,7 @@ class Stage2Page extends ConsumerWidget {
             context: context,
             isScrollControlled: true,
             builder: (context) => Padding(
-              padding: MediaQuery.of(context).viewInsets,
+              padding: MediaQuery.viewInsetsOf(context),
               child: Stage2LoadForm(isNew: true, project: project),
             ),
           );
