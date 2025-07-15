@@ -42,7 +42,6 @@ class Stage4Form extends _$Stage4Form {
         repo.update(data);
       }
       state = state.copyWith(status: Stage4FormStatus.success, data: data);
-      print(state.status);
     } catch (e) {
       state = state.copyWith(
         status: Stage4FormStatus.error,

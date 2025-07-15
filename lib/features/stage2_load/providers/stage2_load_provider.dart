@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:registro_panela/features/stage2_load/domin/stage2_load_data.dart';
-import 'package:registro_panela/features/stage2_load/providers/stage2_loads_mock_provider.dart';
+import 'package:registro_panela/features/stage2_load/data/mock_stage2_loads.dart';
+import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'stage2_load_provider.g.dart';
@@ -8,7 +8,7 @@ part 'stage2_load_provider.g.dart';
 @riverpod
 class Stage2Load extends _$Stage2Load {
   @override
-  List<Stage2LoadData> build() => ref.read(stage2ProjectMockProvider);
+  List<Stage2LoadData> build() => mockStage2Loads;
 
   void add(Stage2LoadData load) {
     state = [load, ...state];

@@ -3,11 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:registro_panela/core/services/image_picker_service_provider.dart';
-import 'package:registro_panela/features/stage1_delivery/domin/stage1_form_data.dart';
-import 'package:registro_panela/features/stage2_load/domin/stage2_load_data.dart';
-import 'package:registro_panela/features/stage3_weigh/domin/stage3_form_data.dart';
+import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data.dart';
+import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';
+import 'package:registro_panela/features/stage3_weigh/domain/stage3_form_data.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_form_provider.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:uuid/uuid.dart';
@@ -99,11 +98,6 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
                         name: 'realWeight_$index',
                         label: 'Peso real (kg)',
                         keyboardType: TextInputType.number,
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.numeric(),
-                          FormBuilderValidators.min(0.0),
-                        ]),
                       ),
                       const SizedBox(height: 16),
                       FormBuilderDropdown<String>(
@@ -118,7 +112,6 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
                             child: Text(e.name.toUpperCase()),
                           );
                         }).toList(),
-                        validator: FormBuilderValidators.required(),
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
@@ -150,23 +143,28 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
                       }
                       final values = _formKey.currentState!.value;
                       final baskets = <BasketWeighData>[];
-                      for (final index in _indices) {
-                        baskets.add(
-                          BasketWeighData(
-                            id:
-                                widget.initialData?.baskets[index].id ??
-                                uuid.v4(),
-                            sequence: index,
-                            referenceWeight: _refWeightPerBasket,
-                            realWeight: double.parse(
-                              values['realWeight_$index'],
+                      for (final i in _indices) {
+                        final raw = values['realWeight_$i'] as String?;
+                        final qual = values['quality_$i'] as String?;
+                        if (raw != null &&
+                            raw.isNotEmpty &&
+                            qual != null &&
+                            qual.isNotEmpty) {
+                          baskets.add(
+                            BasketWeighData(
+                              id:
+                                  widget.initialData?.baskets[i].id ??
+                                  uuid.v4(),
+                              sequence: i,
+                              referenceWeight: _refWeightPerBasket,
+                              realWeight: double.parse(raw),
+                              quality: BasketQuality.values.firstWhere(
+                                (q) => q.name == qual,
+                              ),
+                              photoPath: _photoPaths[i] ?? '',
                             ),
-                            quality: BasketQuality.values.firstWhere(
-                              (q) => q.name == values['quality_$index'],
-                            ),
-                            photoPath: _photoPaths[index]!,
-                          ),
-                        );
+                          );
+                        }
                       }
                       final formData = Stage3FormData(
                         id: widget.initialData?.id ?? uuid.v4(),

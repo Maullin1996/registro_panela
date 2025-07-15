@@ -13,6 +13,10 @@ import 'package:registro_panela/features/stage3_weigh/presentation/stage3_page_s
 import 'package:registro_panela/features/stage4_recollection/presentation/stage4_load_form_page.dart';
 import 'package:registro_panela/features/stage4_recollection/presentation/stage4_page.dart';
 import 'package:registro_panela/features/stage4_recollection/providers/stage4_load_provider.dart';
+import 'package:registro_panela/features/stage5/presentation/stage5_page.dart';
+import 'package:registro_panela/features/stage5_1_missing_weight/presentation/stage5_missing_weight.dart';
+import 'package:registro_panela/features/stage5_2_records/presentation/stage5_records.dart';
+import 'package:registro_panela/features/stage5_summary/presentation/stage5_summary.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = GoRouterNotifier(ref);
@@ -100,6 +104,38 @@ final routerProvider = Provider<GoRouter>((ref) {
             initialData: data,
             isNew: false,
           );
+        },
+      ),
+      GoRoute(
+        name: 'stage5page',
+        path: '${Routes.stage5}/:projectId',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage5Page(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage5summary',
+        path: '${Routes.stage5}/:projectId/summary',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage5Summary(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage5report',
+        path: '${Routes.stage5}/:projectId/report',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage5MissingWeight(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage5records',
+        path: '${Routes.stage5}/:projectId/records',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage5Records(projectId: projectId);
         },
       ),
     ],

@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:registro_panela/core/router/routes.dart';
-import 'package:registro_panela/features/stage1_delivery/domin/stage1_form_data.dart';
+import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
-import 'package:registro_panela/features/stage2_load/domin/stage2_load_data.dart';
+import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_provider.dart';
-import 'package:registro_panela/features/stage3_weigh/domin/stage3_form_data.dart';
+import 'package:registro_panela/features/stage3_weigh/domain/stage3_form_data.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_load_provider.dart';
 
 class Stage3Page extends ConsumerWidget {

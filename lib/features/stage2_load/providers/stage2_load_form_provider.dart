@@ -1,4 +1,4 @@
-import 'package:registro_panela/features/stage2_load/domin/stage2_load_data.dart';
+import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
