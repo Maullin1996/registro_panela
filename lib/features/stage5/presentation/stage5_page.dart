@@ -27,7 +27,7 @@ class _Stage5PageState extends ConsumerState<Stage5Page> {
     final screens = [
       Stage5Summary(projectId: widget.projectId),
       Stage5MissingWeight(projectId: widget.projectId),
-      Stage5Records(projectId: widget.projectId),
+      Stage52Page(projectId: widget.projectId),
     ];
 
     return Scaffold(

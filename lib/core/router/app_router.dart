@@ -15,6 +15,8 @@ import 'package:registro_panela/features/stage4_recollection/presentation/stage4
 import 'package:registro_panela/features/stage4_recollection/providers/stage4_load_provider.dart';
 import 'package:registro_panela/features/stage5/presentation/stage5_page.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/presentation/stage5_missing_weight.dart';
+import 'package:registro_panela/features/stage5_2_records/presentation/Stage52_page_summary.dart';
+import 'package:registro_panela/features/stage5_2_records/presentation/stage52_form_page.dart';
 import 'package:registro_panela/features/stage5_2_records/presentation/stage5_records.dart';
 import 'package:registro_panela/features/stage5_summary/presentation/stage5_summary.dart';
 
@@ -135,7 +137,24 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '${Routes.stage5}/:projectId/records',
         builder: (context, state) {
           final projectId = state.pathParameters['projectId']!;
-          return Stage5Records(projectId: projectId);
+          return Stage52Page(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage52form',
+        path: '${Routes.stage5}/:projectId/records/form',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return Stage52FormPage(projectId: projectId);
+        },
+      ),
+      GoRoute(
+        name: 'stage52summary',
+        path: '${Routes.stage5}/:projectId/records/:recordId/summary',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          final recordId = state.pathParameters['recordId']!;
+          return Stage52SummaryPage(projectId: projectId, recordId: recordId);
         },
       ),
     ],
