@@ -12,9 +12,12 @@ class Stage5Summary extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final summaryByDay = ref.watch(stage5SummaryProvider(projectId));
     final globalSummary = ref.watch(stage5GlobalSummaryProvider(projectId));
+    final textTheme = TextTheme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Resumen de cargues')),
+      appBar: AppBar(
+        title: Text('Resumen de cargues', style: textTheme.headlineMedium),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -25,21 +28,44 @@ class Stage5Summary extends ConsumerWidget {
               scrollDirection:
                   Axis.horizontal, // habilita scroll si se sale de pantalla
               child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('Fecha')),
-                  DataColumn(label: Text('Canastillas')),
-                  DataColumn(label: Text('Peso real (kg)')),
-                  DataColumn(label: Text('Gavera (g)')),
+                columns: [
+                  DataColumn(
+                    label: Text('Fecha', style: textTheme.headlineSmall),
+                  ),
+                  DataColumn(
+                    label: Text('Canastillas', style: textTheme.headlineSmall),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Peso real (kg)',
+                      style: textTheme.headlineSmall,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text('Gavera (g)', style: textTheme.headlineSmall),
+                  ),
                 ],
                 rows: summaryByDay.expand((day) {
                   final fecha = DateFormat.yMd().format(day.date);
                   return day.items.map((it) {
                     return DataRow(
                       cells: [
-                        DataCell(Text(fecha)),
-                        DataCell(Text('${it.totalCount}')),
-                        DataCell(Text(it.realWeight.toStringAsFixed(0))),
-                        DataCell(Text(it.gaveraWeight.toStringAsFixed(0))),
+                        DataCell(Text(fecha, style: textTheme.bodyLarge)),
+                        DataCell(
+                          Text('${it.totalCount}', style: textTheme.bodyLarge),
+                        ),
+                        DataCell(
+                          Text(
+                            it.realWeight.toStringAsFixed(0),
+                            style: textTheme.bodyLarge,
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            it.gaveraWeight.toStringAsFixed(0),
+                            style: textTheme.bodyLarge,
+                          ),
+                        ),
                       ],
                     );
                   });
@@ -49,14 +75,16 @@ class Stage5Summary extends ConsumerWidget {
 
             // TOTAL GLOBAL
             const SizedBox(height: 16),
-            Text(
-              'Total canastillas',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Center(
+              child: Text('Total canastillas', style: textTheme.headlineMedium),
             ),
             const SizedBox(height: 8),
             ...globalSummary.map((it) {
-              return Text(
-                '${it.totalCount} canastillas de ${it.realWeight.toStringAsFixed(0)} kg – gavera ${it.gaveraWeight.toStringAsFixed(0)}',
+              return Center(
+                child: Text(
+                  '${it.totalCount} canastillas de ${it.realWeight.toStringAsFixed(0)} kg – gavera ${it.gaveraWeight.toStringAsFixed(0)}',
+                  style: textTheme.bodyLarge,
+                ),
               );
             }),
           ],

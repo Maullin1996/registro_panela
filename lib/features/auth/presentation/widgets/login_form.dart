@@ -7,6 +7,7 @@ import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/features/auth/domin/auth_status.dart';
 import 'package:registro_panela/features/auth/providers/auth_provider.dart';
 import 'package:registro_panela/features/auth/providers/login_form_provider.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
@@ -34,13 +35,17 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       }
     });
 
+    final TextTheme textTheme = TextTheme.of(context);
+
     final formState = ref.watch(loginFormProvider);
     final formNotifier = ref.read(loginFormProvider.notifier);
     return FormBuilder(
       key: _fbkey,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Usuario:', style: textTheme.headlineLarge),
+          SizedBox(height: AppSpacing.small),
           AppFormTextFild(
             name: 'email',
             label: 'Correo electrónico',
@@ -52,7 +57,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ]),
             onChanged: (v) => formNotifier.onEmailChanged(v ?? ''),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: AppSpacing.medium),
+          Text('Contraseña:', style: textTheme.headlineLarge),
+          SizedBox(height: AppSpacing.small),
           AppFormTextFild(
             name: 'password',
             label: 'Contraseña',
@@ -63,19 +70,32 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ]),
             onChanged: (v) => formNotifier.onPasswordChanged(v ?? ''),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSpacing.mediumLarge),
           formState.isSubmitting
-              ? const CircularProgressIndicator()
-              : ElevatedButton(
-                  onPressed: formState.isValid
-                      ? () {
-                          if (_fbkey.currentState?.saveAndValidate() ?? false) {
-                            formNotifier.submit();
+              ? Center(child: const CircularProgressIndicator())
+              : Center(
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.blue[100]),
+                      elevation: WidgetStatePropertyAll(3),
+                    ),
+                    onPressed: formState.isValid
+                        ? () {
+                            if (_fbkey.currentState?.saveAndValidate() ??
+                                false) {
+                              formNotifier.submit();
+                            }
                           }
-                        }
-                      : null,
+                        : null,
 
-                  child: const Text('Iniciar sesión'),
+                    child: const Text(
+                      'Iniciar sesión',
+                      style: TextStyle(
+                        fontSize: AppTypography.h3,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ),
         ],
       ),

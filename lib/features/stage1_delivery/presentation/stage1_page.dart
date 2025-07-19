@@ -7,6 +7,7 @@ import 'package:registro_panela/features/stage1_delivery/presentation/widgets/st
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_form_provider.dart'
     hide Stage1Form;
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
 
 class Stage1Page extends ConsumerWidget {
   final String projectId;
@@ -14,6 +15,8 @@ class Stage1Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = TextTheme.of(context);
+
     ref.listen<Stage1FormState>(stage1FormProvider, (prev, next) {
       if (prev?.status == Stage1FormStatus.submitting &&
           next.status == Stage1FormStatus.success) {
@@ -33,7 +36,10 @@ class Stage1Page extends ConsumerWidget {
         : projects.firstWhereOrNull((project) => project.id == projectId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(project == null ? 'New Project' : 'Edit Project'),
+        title: Text(
+          project == null ? 'Nuevo proyecto' : 'Modificar ${project.name}',
+          style: textTheme.headlineLarge,
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded),
           onPressed: () => context.go(Routes.projects),
@@ -41,7 +47,12 @@ class Stage1Page extends ConsumerWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.small,
+            AppSpacing.smallLarge,
+            AppSpacing.small,
+            AppSpacing.medium,
+          ),
           child: Stage1Form(initialData: project, isNew: isNew),
         ),
       ),

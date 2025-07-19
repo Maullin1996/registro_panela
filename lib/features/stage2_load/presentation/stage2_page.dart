@@ -8,6 +8,10 @@ import 'package:registro_panela/features/stage1_delivery/providers/stage1_projec
 import 'package:registro_panela/features/stage2_load/presentation/widgets/stage2_load_form.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_form_provider.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_provider.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
+
+import 'package:registro_panela/shared/widgets/custom_card.dart';
+import 'package:registro_panela/shared/widgets/custom_rich_text.dart';
 
 class Stage2Page extends ConsumerWidget {
   final String projectId;
@@ -44,17 +48,25 @@ class Stage2Page extends ConsumerWidget {
       );
     }
 
+    final textTheme = TextTheme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cargues de ${project.name}'),
+        title: Text('Cargues ${project.name}', style: textTheme.headlineMedium),
         leading: BackButton(onPressed: () => context.go(Routes.projects)),
       ),
       body: loads.isEmpty
           ? const Center(child: Text('Aún no hay cargues registrados'))
           : ListView.separated(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.small,
+                AppSpacing.small,
+                AppSpacing.small,
+                AppSpacing.medium,
+              ),
               itemCount: loads.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, __) =>
+                  const SizedBox(height: AppSpacing.smallLarge),
               itemBuilder: (BuildContext context, int index) {
                 final load = loads[index];
                 return GestureDetector(
@@ -62,11 +74,17 @@ class Stage2Page extends ConsumerWidget {
                     showDialog(
                       context: context,
                       builder: (dctx) => AlertDialog(
-                        title: const Text('¿Editar este cargue?'),
+                        title: Text(
+                          '¿Editar este cargue?',
+                          style: textTheme.headlineMedium,
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(dctx),
-                            child: const Text('Cancelar'),
+                            child: Text(
+                              'Cancelar',
+                              style: textTheme.headlineSmall,
+                            ),
                           ),
                           TextButton(
                             onPressed: () {
@@ -84,36 +102,43 @@ class Stage2Page extends ConsumerWidget {
                                 ),
                               );
                             },
-                            child: const Text('Editar'),
+                            child: Text(
+                              'Editar',
+                              style: textTheme.headlineSmall,
+                            ),
                           ),
                         ],
                       ),
                     );
                   },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(12),
-                    ),
+                  child: CustomCard(
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(AppSpacing.smallLarge),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Fecha: ${DateFormat.yMd().format(load.date)}',
-                            style: Theme.of(context).textTheme.bodyMedium,
+                          CustomRichText(
+                            firstText: 'Fecha: ',
+                            secondText: DateFormat.yMd().format(load.date),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Cantidad de canastillas: ${load.baskets.count}',
+
+                          const SizedBox(height: AppSpacing.xSmall),
+                          CustomRichText(
+                            firstText: 'Cantidad de canastillas: ',
+                            secondText: load.baskets.count.toString(),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Peso de referencia: ${load.baskets.realWeight.toStringAsFixed(2)} kg',
+
+                          const SizedBox(height: AppSpacing.xSmall),
+                          CustomRichText(
+                            firstText: 'Peso de referencia: ',
+                            secondText:
+                                '${load.baskets.realWeight.toStringAsFixed(2)} kg',
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Peso gavera: ${load.baskets.referenceWeight} g',
+
+                          const SizedBox(height: AppSpacing.xSmall),
+                          CustomRichText(
+                            firstText: 'Peso gavera: ',
+                            secondText: '${load.baskets.referenceWeight} g',
                           ),
                         ],
                       ),
@@ -124,7 +149,7 @@ class Stage2Page extends ConsumerWidget {
             ),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
-        label: const Text('Nuevo cargue'),
+        label: Text('Nuevo cargue', style: textTheme.headlineSmall),
         onPressed: () {
           showModalBottomSheet(
             context: context,

@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_form_provider.dart';
@@ -64,6 +65,8 @@ class _Stage2LoadFormState extends ConsumerState<Stage2LoadForm> {
 
     final uuid = Uuid();
 
+    final textTheme = TextTheme.of(context);
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 16),
@@ -74,49 +77,94 @@ class _Stage2LoadFormState extends ConsumerState<Stage2LoadForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              FormBuilderDropdown<double>(
-                name: 'referenceWeight',
-                decoration: const InputDecoration(
-                  labelText: 'Peso de referencia de la gavera',
-                  border: OutlineInputBorder(),
+              Text(
+                'Peso de referencia de la gavera',
+                style: textTheme.headlineMedium,
+              ),
+              SizedBox(height: AppSpacing.small),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(1, 1),
+                      color: Colors.black.withAlpha(50),
+                      blurRadius: 2,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(26),
+                  border: Border.all(color: AppColors.inputBorder, width: 2),
                 ),
-                items: widget.project.gaveras
-                    .map(
-                      (g) => DropdownMenuItem(
-                        value: g.referenceWeight,
-                        child: Text('${g.referenceWeight} g'),
-                      ),
-                    )
-                    .toList(),
-                validator: FormBuilderValidators.required(),
+                child: FormBuilderDropdown<double>(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppSpacing.small,
+                    vertical: AppSpacing.small,
+                  ),
+                  name: 'referenceWeight',
+                  decoration: const InputDecoration(border: InputBorder.none),
+                  items: widget.project.gaveras
+                      .map(
+                        (g) => DropdownMenuItem(
+                          value: g.referenceWeight,
+                          child: Text(
+                            '${g.referenceWeight} g',
+                            style: textTheme.bodyLarge,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  validator: FormBuilderValidators.required(),
+                ),
               ),
               const SizedBox(height: 16),
-              Row(
+              Column(
                 children: [
-                  Expanded(
-                    child: AppFormTextFild(
-                      name: 'basketsCount',
-                      label: 'Cantidad de canastillas',
-                      keyboardType: TextInputType.number,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.integer(),
-                        FormBuilderValidators.min(1),
-                      ]),
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: AppFormTextFild(
-                      name: 'basketWeight',
-                      label: 'Peso de referencia (kg)',
-                      keyboardType: TextInputType.number,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.integer(),
-                        FormBuilderValidators.min(1),
-                      ]),
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Canastillas',
+                              style: textTheme.headlineMedium,
+                            ),
+                            AppFormTextFild(
+                              name: 'basketsCount',
+                              label: 'Cantidad de canastillas',
+                              keyboardType: TextInputType.number,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                                FormBuilderValidators.integer(),
+                                FormBuilderValidators.min(1),
+                              ]),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Canastillas',
+                              style: textTheme.headlineMedium,
+                            ),
+                            AppFormTextFild(
+                              name: 'basketWeight',
+                              label: 'Peso de referencia (kg)',
+                              keyboardType: TextInputType.number,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                                FormBuilderValidators.integer(),
+                                FormBuilderValidators.min(1),
+                              ]),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -151,7 +199,7 @@ class _Stage2LoadFormState extends ConsumerState<Stage2LoadForm> {
                         width: 24,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Guardar cargue'),
+                    : Text('Guardar cargue', style: textTheme.headlineMedium),
               ),
             ],
           ),

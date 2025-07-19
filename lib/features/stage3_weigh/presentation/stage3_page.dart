@@ -11,6 +11,8 @@ import 'package:registro_panela/features/stage2_load/providers/stage2_load_provi
 import 'package:registro_panela/features/stage3_weigh/domain/stage3_form_data.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_load_provider.dart';
 
+import '../../../shared/utils/colors.dart';
+
 class Stage3Page extends ConsumerWidget {
   final String projectId;
   const Stage3Page({super.key, required this.projectId});
@@ -33,9 +35,11 @@ class Stage3Page extends ConsumerWidget {
       );
     }
 
+    final textTheme = TextTheme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pesaje: ${project.name}'),
+        title: Text('Pesaje: ${project.name}', style: textTheme.headlineMedium),
         leading: BackButton(onPressed: () => context.go(Routes.projects)),
       ),
       body: ListView.separated(
@@ -68,9 +72,15 @@ class Stage3Page extends ConsumerWidget {
           return GestureDetector(
             onTap: () => _onLoadTap(context, project, load2, entry),
             child: Card(
+              color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16), // Bordes redondeados
+                side: BorderSide(
+                  color: AppColors.inputBorder, // Color del borde
+                  width: 2, // Grosor del borde
+                ),
               ),
+              elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -78,25 +88,57 @@ class Stage3Page extends ConsumerWidget {
                   children: [
                     Text(
                       'Fecha: ${DateFormat.yMd().format(load2.date)}',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: textTheme.headlineSmall,
                     ),
-                    const SizedBox(height: 8),
-                    Text('Canastillas enviadas: $totalBaskets'),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Registrado en Mlienda',
+                      style: textTheme.headlineSmall,
+                    ),
                     const SizedBox(height: 8),
                     Text(
-                      'Peso referencia: ${group.realWeight.toStringAsFixed(2)} kg',
+                      'Canastillas enviadas: $totalBaskets',
+                      style: textTheme.bodyLarge,
                     ),
                     const SizedBox(height: 8),
-                    Text('Peso esperado: ${totalRefkg.toStringAsFixed(2)} kg'),
-                    const Divider(),
-                    Text('Canastillas registradas: $regCount'),
+                    Text(
+                      'Peso canastilla: ${group.realWeight.toStringAsFixed(2)} kg',
+                      style: textTheme.bodyLarge,
+                    ),
                     const SizedBox(height: 8),
-                    Text('Peso registrado: ${regWeight.toStringAsFixed(2)} kg'),
-                    const Divider(),
-                    Text('Faltan canastillas: $missingCount'),
+                    Text(
+                      'Peso total esperado: ${totalRefkg.toStringAsFixed(2)} kg',
+                      style: textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Registrado en bodega',
+                      style: textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Canastillas registradas: $regCount',
+                      style: textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Peso total registrado: ${regWeight.toStringAsFixed(2)} kg',
+                      style: textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Canastillas y Peso faltante',
+                      style: textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Faltan canastillas: $missingCount',
+                      style: textTheme.bodyLarge,
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       'Peso faltante: ${missingWeight.toStringAsFixed(2)}kg',
+                      style: textTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -114,10 +156,11 @@ class Stage3Page extends ConsumerWidget {
     Stage2LoadData load2,
     Stage3FormData? entry,
   ) {
+    final textTheme = TextTheme.of(context);
     showDialog(
       context: context,
       builder: (dcontext) => AlertDialog(
-        title: const Text('¿Qué deseas hacer?'),
+        title: Text('¿Qué deseas hacer?', style: textTheme.headlineMedium),
         actions: [
           if (entry != null)
             TextButton(
@@ -127,14 +170,14 @@ class Stage3Page extends ConsumerWidget {
                   '${Routes.stage3}/${project.id}/${load2.id}/summary',
                 );
               },
-              child: const Text('Ver resumen'),
+              child: Text('Ver resumen', style: textTheme.bodyLarge),
             ),
           TextButton(
             onPressed: () {
               context.pop(dcontext);
               context.push('${Routes.stage3}/$projectId/${load2.id}/form');
             },
-            child: const Text('Continuar formulario'),
+            child: Text('Continuar formulario', style: textTheme.bodyLarge),
           ),
         ],
       ),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/features/auth/domin/authenticated_user.dart';
 import 'package:registro_panela/features/auth/providers/auth_provider.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
+import 'package:registro_panela/shared/widgets/custom_card.dart';
 
 class ProjectSelectorPage extends ConsumerWidget {
   const ProjectSelectorPage({super.key});
@@ -13,9 +16,15 @@ class ProjectSelectorPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final projects = ref.watch(stage1ProjectsProvider);
     final user = ref.watch(authProvider).user;
+    final textTheme = TextTheme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Seleccionar Proyecto')),
+      appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.logout, size: 30)),
+        ],
+        title: Text('Seleccionar Proyecto', style: textTheme.headlineLarge),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Sólo admin y stage1 pueden crear
@@ -34,24 +43,69 @@ class ProjectSelectorPage extends ConsumerWidget {
         child: const Icon(Icons.add_outlined),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.small,
+          AppSpacing.smallLarge,
+          AppRadius.small,
+          AppSpacing.largeSmall,
+        ),
         itemCount: projects.length,
         itemBuilder: (context, i) {
           final p = projects[i];
-          return Card(
-            child: ListTile(
-              title: Text(p.name),
-              subtitle: Text(
-                'Gaveras: ${p.gaveras.length}, Canastillas: ${p.basketsQuantity}',
+          return Container(
+            margin: EdgeInsets.only(bottom: AppSpacing.xSmall),
+            child: CustomCard(
+              child: ListTile(
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(p.name, style: textTheme.headlineMedium),
+                        ),
+                        Text(
+                          DateFormat.yMd().format(p.date),
+                          style: textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: AppSpacing.xSmall),
+                    Text(
+                      'Gaveras suministradas',
+                      style: textTheme.headlineSmall,
+                    ),
+                    SizedBox(height: AppSpacing.xSmall),
+                    ...List.generate(
+                      p.gaveras.length,
+                      (index) => Text(
+                        '${p.gaveras[index].quantity} de Gavera ${p.gaveras[index].referenceWeight} g',
+                      ),
+                    ),
+                    SizedBox(height: AppSpacing.xSmall),
+                    Text(
+                      'Cantidad de canastillas',
+                      style: textTheme.headlineSmall,
+                    ),
+                    SizedBox(height: AppSpacing.xSmall),
+                    Text('se suministraron ${p.basketsQuantity} canastillas'),
+                    SizedBox(height: AppSpacing.xSmall),
+                    Text('Numero de contacto', style: textTheme.headlineSmall),
+                    SizedBox(height: AppSpacing.xSmall),
+                    Text(p.phone),
+                  ],
+                ),
+                onTap: () {
+                  if (user?.role == UserRole.admin) {
+                    _showAdminStageSelector(context, p.id);
+                  } else {
+                    final route = _routeForRole(user!.role);
+                    context.go('$route/${p.id}');
+                  }
+                },
               ),
-              onTap: () {
-                if (user?.role == UserRole.admin) {
-                  _showAdminStageSelector(context, p.id);
-                } else {
-                  final route = _routeForRole(user!.role);
-                  context.go('$route/${p.id}');
-                }
-              },
             ),
           );
         },
@@ -78,19 +132,52 @@ class ProjectSelectorPage extends ConsumerWidget {
 
   void _showAdminStageSelector(BuildContext context, String projectId) {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
-      builder: (_) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var stage = 1; stage <= 5; stage++)
-              ListTile(
-                leading: Icon(_iconForStage(stage)),
-                title: Text('Etapa $stage'),
-                onTap: () => context.go('${byStage(stage)}/$projectId'),
+      builder: (_) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 1.0,
+        minChildSize: 1.0,
+        maxChildSize: 1.0,
+        builder: (context, scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
               ),
-          ],
-        ),
+            ),
+            child: ListView(
+              controller: scrollController,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              children: [
+                SizedBox(height: AppSpacing.mediumLarge),
+                for (var stage = 1; stage <= 5; stage++)
+                  Padding(
+                    padding: const EdgeInsets.all(AppSpacing.small),
+                    child: ListTile(
+                      contentPadding: EdgeInsetsGeometry.all(AppSpacing.small),
+                      dense: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          16,
+                        ), // Bordes redondeados
+                        side: BorderSide(
+                          color: AppColors.inputBorder, // Color del borde
+                          width: 2, // Grosor del borde
+                        ),
+                      ),
+                      leading: Icon(_iconForStage(stage), size: 30),
+                      title: Text(
+                        'Etapa $stage',
+                        style: TextTheme.of(context).headlineLarge,
+                      ),
+                      onTap: () => context.go('${byStage(stage)}/$projectId'),
+                    ),
+                  ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -98,15 +185,15 @@ class ProjectSelectorPage extends ConsumerWidget {
   IconData _iconForStage(int stage) {
     switch (stage) {
       case 1:
-        return Icons.delivery_dining;
+        return AppIcons.deliversSupplies;
       case 2:
-        return Icons.inbox_outlined;
+        return AppIcons.collect;
       case 3:
-        return Icons.scale;
+        return AppIcons.weighing;
       case 4:
-        return Icons.assignment_return;
+        return AppIcons.pickUpSupplies;
       case 5:
-        return Icons.summarize_outlined;
+        return AppIcons.summarize;
       default:
         return Icons.help;
     }

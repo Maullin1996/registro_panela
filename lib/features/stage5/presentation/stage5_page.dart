@@ -6,6 +6,7 @@ import 'package:registro_panela/features/stage1_delivery/providers/stage1_projec
 import 'package:registro_panela/features/stage5_1_missing_weight/presentation/stage5_missing_weight.dart';
 import 'package:registro_panela/features/stage5_2_records/presentation/stage5_records.dart';
 import 'package:registro_panela/features/stage5_summary/presentation/stage5_summary.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
 
 class Stage5Page extends ConsumerStatefulWidget {
   final String projectId;
@@ -30,9 +31,11 @@ class _Stage5PageState extends ConsumerState<Stage5Page> {
       Stage52Page(projectId: widget.projectId),
     ];
 
+    final textTheme = TextTheme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(project.name),
+        title: Text(project.name, style: textTheme.headlineMedium),
         leading: BackButton(onPressed: () => context.go(Routes.projects)),
       ),
       body: screens[selectedIndex],
@@ -41,15 +44,15 @@ class _Stage5PageState extends ConsumerState<Stage5Page> {
         onTap: (value) => setState(() => selectedIndex = value),
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
+            icon: Icon(AppIcons.weakSummary),
             label: 'Resumen',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.request_page_outlined),
+            icon: Icon(AppIcons.reporte),
             label: 'Reporte',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.format_list_bulleted_add),
+            icon: Icon(AppIcons.finalRecord),
             label: 'Entrega',
           ),
         ],

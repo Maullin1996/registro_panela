@@ -7,6 +7,7 @@ import 'package:registro_panela/features/stage2_load/providers/stage2_load_provi
 import 'package:registro_panela/features/stage3_weigh/presentation/widget/stage3_load_form.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_form_provider.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_load_provider.dart';
+import 'package:registro_panela/shared/utils/spacing.dart';
 
 class Stage3FormPage extends ConsumerWidget {
   final String projectId;
@@ -57,12 +58,25 @@ class Stage3FormPage extends ConsumerWidget {
       }
     });
 
+    final textTheme = TextTheme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(isNew ? 'Registrar pesaje' : 'Editar pesaje'),
+        title: Text(
+          isNew ? 'Registrar pesaje' : 'Editar pesaje',
+          style: textTheme.headlineMedium,
+        ),
         leading: BackButton(onPressed: () => context.pop()),
       ),
-      body: Stage3LoadForm(project: project, load2: load2!, isNew: isNew),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.small,
+          AppSpacing.smallLarge,
+          AppSpacing.small,
+          AppSpacing.medium,
+        ),
+        child: Stage3LoadForm(project: project, load2: load2!, isNew: isNew),
+      ),
     );
   }
 }

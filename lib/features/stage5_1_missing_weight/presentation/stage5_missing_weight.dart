@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/domain/stage5_price_form.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/providers/global_missing_provider.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/providers/stage5_price_form_state_provider.dart';
+import 'package:registro_panela/shared/utils/spacing.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,38 +16,61 @@ class Stage5MissingWeight extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final summary3 = ref.watch(stage3GlobalSummaryProvider(projectId));
+    final textTheme = TextTheme.of(context);
+
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.small,
+        AppSpacing.smallLarge,
+        AppSpacing.small,
+        AppSpacing.medium,
+      ),
       child: Column(
         children: [
+          Text('Resumen de peso faltante', style: textTheme.headlineMedium),
+          const SizedBox(height: 16),
+          Text('Total registrado en moliendas', style: textTheme.headlineSmall),
+          const SizedBox(height: 16),
           Text(
-            'Resumen de peso faltante',
-            style: Theme.of(context).textTheme.headlineMedium,
+            'Canastillas esperadas: ${summary3.totalExpectedCount}',
+            style: textTheme.bodyLarge,
           ),
-          const SizedBox(height: 8),
-          Text('Canastillas esperadas: ${summary3.totalExpectedCount}'),
           Text(
             'Peso esperado: ${summary3.totalExpectedWeight.toStringAsFixed(2)} kg',
+            style: textTheme.bodyLarge,
           ),
-          const SizedBox(height: 8),
-          Text('Canastillas registradas: ${summary3.totalRegisteredCount}'),
+          const SizedBox(height: 16),
+          Text('Total registrado en bodega', style: textTheme.headlineSmall),
+          const SizedBox(height: 16),
+          Text(
+            'Canastillas registradas: ${summary3.totalRegisteredCount}',
+            style: textTheme.bodyLarge,
+          ),
           Text(
             'Peso registrado: ${summary3.totalRegisteredWeight.toStringAsFixed(2)} kg',
+            style: textTheme.bodyLarge,
           ),
           if (summary3.totalMissingCount != 0 ||
               summary3.totalMissingWeight != 0)
             Column(
               children: [
-                const Divider(height: 32),
+                const SizedBox(height: 16),
+                Text('Total Faltante', style: textTheme.headlineSmall),
+                const SizedBox(height: 16),
+
                 if (summary3.totalMissingCount != 0)
                   Text(
                     'Canastillas Faltantes: ${summary3.totalMissingCount}',
-                    style: TextStyle(color: Colors.red[700]),
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: Colors.red[700],
+                    ),
                   ),
                 if (summary3.totalMissingWeight != 0)
                   Text(
                     'Faltan: ${summary3.totalMissingWeight.toStringAsFixed(2)} kg',
-                    style: TextStyle(color: Colors.red[700]),
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: Colors.red[700],
+                    ),
                   ),
               ],
             ),
@@ -79,17 +103,19 @@ class __FormTotalToPayState extends ConsumerState<_FormTotalToPay> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = TextTheme.of(context);
     final formState = ref.watch(stage5PriceFormProvider);
     final formNotifier = ref.read(stage5PriceFormProvider.notifier);
+
     return FormBuilder(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Total a pagar',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+          Center(child: Text('Total a pagar', style: textTheme.headlineMedium)),
           const SizedBox(height: 24),
+          Text('Valor por kilo', style: textTheme.headlineSmall),
+          const SizedBox(height: 8),
           AppFormTextFild(
             name: 'pricePerKilo',
             label: 'Valor por kilo:',
@@ -101,6 +127,8 @@ class __FormTotalToPayState extends ConsumerState<_FormTotalToPay> {
             ]),
           ),
           const SizedBox(height: 24),
+          Text('Se realizaron abonos', style: textTheme.headlineSmall),
+          const SizedBox(height: 8),
           AppFormTextFild(
             name: 'installment',
             label: 'Se realizaron abonos:',
@@ -114,32 +142,35 @@ class __FormTotalToPayState extends ConsumerState<_FormTotalToPay> {
                 const SizedBox(height: 34),
               ],
             ),
-          FloatingActionButton.extended(
-            onPressed: formState.status == Stage5PriceFormStatus.submitting
-                ? null
-                : () {
-                    if (!(_formKey.currentState?.saveAndValidate() ?? false)) {
-                      return;
-                    }
+          Center(
+            child: FloatingActionButton.extended(
+              onPressed: formState.status == Stage5PriceFormStatus.submitting
+                  ? null
+                  : () {
+                      if (!(_formKey.currentState?.saveAndValidate() ??
+                          false)) {
+                        return;
+                      }
 
-                    final values = _formKey.currentState!.value;
+                      final values = _formKey.currentState!.value;
 
-                    final data = Stage5PriceFormData(
-                      id: uuid.v4(),
-                      projectId: widget.projectId,
-                      date: DateTime.now(),
-                      pricePerKilo:
-                          int.tryParse(values['pricePerKilo'] ?? '0') ?? 0,
-                      installment:
-                          int.tryParse(values['installment'] ?? '0') ?? 0,
-                    );
-                    formNotifier.submit(
-                      projectId: widget.projectId,
-                      data: data,
-                      totalRegisteredWeight: widget.totalRegisteredWeight,
-                    );
-                  },
-            label: Text('Calcular'),
+                      final data = Stage5PriceFormData(
+                        id: uuid.v4(),
+                        projectId: widget.projectId,
+                        date: DateTime.now(),
+                        pricePerKilo:
+                            int.tryParse(values['pricePerKilo'] ?? '0') ?? 0,
+                        installment:
+                            int.tryParse(values['installment'] ?? '0') ?? 0,
+                      );
+                      formNotifier.submit(
+                        projectId: widget.projectId,
+                        data: data,
+                        totalRegisteredWeight: widget.totalRegisteredWeight,
+                      );
+                    },
+              label: Text('Calcular', style: textTheme.headlineSmall),
+            ),
           ),
         ],
       ),

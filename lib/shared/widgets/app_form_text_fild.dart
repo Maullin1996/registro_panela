@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
 
 class AppFormTextFild extends StatelessWidget {
   final String name;
@@ -25,19 +26,37 @@ class AppFormTextFild extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilderTextField(
-      name: name,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText,
-        border: const OutlineInputBorder(),
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.smallLarge,
+        vertical: AppSpacing.xSmall,
       ),
-      initialValue: initialValue,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      validator: validator,
-      style: Theme.of(context).textTheme.bodyMedium,
-      onChanged: onChanged,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(1, 1),
+            color: Colors.black.withAlpha(50),
+            blurRadius: 2,
+            spreadRadius: 1,
+          ),
+        ],
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(color: AppColors.inputBorder, width: 2),
+      ),
+      child: FormBuilderTextField(
+        name: name,
+        decoration: InputDecoration(
+          hintText: hintText,
+          border: InputBorder.none,
+        ),
+        initialValue: initialValue,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        validator: validator,
+        style: Theme.of(context).textTheme.bodyLarge,
+        onChanged: onChanged,
+      ),
     );
   }
 }

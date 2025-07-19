@@ -8,6 +8,8 @@ import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data
 import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';
 import 'package:registro_panela/features/stage3_weigh/domain/stage3_form_data.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_form_provider.dart';
+import 'package:registro_panela/shared/utils/colors.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:uuid/uuid.dart';
 
@@ -63,6 +65,7 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = TextTheme.of(context);
     final formState = ref.watch(stage3FormProvider);
     final formNotifier = ref.read(stage3FormProvider.notifier);
     final uuid = const Uuid();
@@ -85,14 +88,28 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
               _indices.length,
               (index) => Card(
                 margin: const EdgeInsets.only(bottom: 16),
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16), // Bordes redondeados
+                  side: BorderSide(
+                    color: AppColors.inputBorder, // Color del borde
+                    width: 2, // Grosor del borde
+                  ),
+                ),
+                elevation: 2,
                 child: Container(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Canastilla #${index + 1}',
-                        style: Theme.of(context).textTheme.titleMedium,
+                      Center(
+                        child: Text(
+                          'Canastilla #${index + 1}',
+                          style: textTheme.headlineMedium,
+                        ),
                       ),
+                      const SizedBox(height: 16),
+                      Text('Peso real (kg)', style: textTheme.headlineMedium),
                       const SizedBox(height: 8),
                       AppFormTextFild(
                         name: 'realWeight_$index',
@@ -100,24 +117,56 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
                         keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 16),
-                      FormBuilderDropdown<String>(
-                        name: 'quality_$index',
-                        decoration: const InputDecoration(
-                          labelText: 'Calidad',
-                          border: OutlineInputBorder(),
+                      Text('Calidad', style: textTheme.headlineMedium),
+                      const SizedBox(height: 8),
+
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              offset: const Offset(1, 1),
+                              color: Colors.black.withAlpha(50),
+                              blurRadius: 2,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(26),
+                          border: Border.all(
+                            color: AppColors.inputBorder,
+                            width: 2,
+                          ),
                         ),
-                        items: BasketQuality.values.map((e) {
-                          return DropdownMenuItem(
-                            value: e.name,
-                            child: Text(e.name.toUpperCase()),
-                          );
-                        }).toList(),
+                        child: FormBuilderDropdown<String>(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: AppSpacing.small,
+                            vertical: AppSpacing.small,
+                          ),
+                          name: 'quality_$index',
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          items: BasketQuality.values.map((e) {
+                            return DropdownMenuItem(
+                              value: e.name,
+                              child: Text(
+                                e.name.toUpperCase(),
+                                style: textTheme.bodyLarge,
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
                       const SizedBox(height: 16),
-                      ElevatedButton.icon(
-                        onPressed: () => _pickImage(index),
-                        icon: const Icon(Icons.camera_alt),
-                        label: const Text('Tomar foto'),
+                      Center(
+                        child: ElevatedButton.icon(
+                          onPressed: () => _pickImage(index),
+                          icon: const Icon(Icons.camera_alt),
+                          label: Text(
+                            'Tomar foto',
+                            style: textTheme.headlineSmall,
+                          ),
+                        ),
                       ),
                       if (_photoPaths[index]?.isNotEmpty == true) ...[
                         const SizedBox(height: 8),
@@ -177,7 +226,10 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
                     },
               child: formState.status == Stage3FormStatus.submitting
                   ? const CircularProgressIndicator()
-                  : Text(widget.isNew ? 'Register' : 'Actualizar'),
+                  : Text(
+                      widget.isNew ? 'Register' : 'Actualizar',
+                      style: textTheme.headlineSmall,
+                    ),
             ),
           ],
         ),

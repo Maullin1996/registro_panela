@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:registro_panela/core/router/app_router.dart';
+import 'package:registro_panela/shared/theme/theme.dart';
 
 void main() {
   runApp(const ProviderScope(child: MainApp()));
@@ -15,12 +16,7 @@ class MainApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Registro Panela',
       routerConfig: router,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 153, 209, 255),
-        ),
-        useMaterial3: true,
-      ),
+      theme: AppThemes.lightTheme,
     );
   }
 }
