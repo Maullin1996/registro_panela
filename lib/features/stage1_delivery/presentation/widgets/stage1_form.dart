@@ -231,7 +231,7 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
                 child: ElevatedButton.icon(
                   onPressed: _onPickImage,
                   icon: const Icon(Icons.camera_alt, size: 30),
-                  label: Text('Tomar Foto', style: textTheme.headlineMedium),
+                  label: Text('Tomar Foto'),
                 ),
               ),
               if (_fotoPath != null)
@@ -302,7 +302,7 @@ class _Stage1FormState extends ConsumerState<Stage1Form> {
                         },
                   child: state.status == Stage1FormStatus.submitting
                       ? const CircularProgressIndicator()
-                      : Text('Guardar', style: textTheme.headlineMedium),
+                      : Text('Guardar'),
                 ),
               ),
             ],

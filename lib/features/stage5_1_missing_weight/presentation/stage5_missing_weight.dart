@@ -3,10 +3,13 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/domain/stage5_price_form.dart';
+import 'package:registro_panela/features/stage5_1_missing_weight/presentation/helper/money_format.dart';
+import 'package:registro_panela/features/stage5_1_missing_weight/presentation/helper/money_input_formatter.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/providers/global_missing_provider.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/providers/stage5_price_form_state_provider.dart';
 import 'package:registro_panela/shared/utils/spacing.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
+import 'package:registro_panela/shared/widgets/custom_rich_text.dart';
 import 'package:uuid/uuid.dart';
 
 class Stage5MissingWeight extends ConsumerWidget {
@@ -28,35 +31,37 @@ class Stage5MissingWeight extends ConsumerWidget {
       child: Column(
         children: [
           Text('Resumen de peso faltante', style: textTheme.headlineMedium),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.smallLarge),
           Text('Total registrado en moliendas', style: textTheme.headlineSmall),
-          const SizedBox(height: 16),
-          Text(
-            'Canastillas esperadas: ${summary3.totalExpectedCount}',
-            style: textTheme.bodyLarge,
+          const SizedBox(height: AppSpacing.smallLarge),
+          CustomRichText(
+            firstText: 'Canastillas esperadas: ',
+            secondText: '${summary3.totalExpectedCount}',
           ),
-          Text(
-            'Peso esperado: ${summary3.totalExpectedWeight.toStringAsFixed(2)} kg',
-            style: textTheme.bodyLarge,
+          CustomRichText(
+            firstText: 'Peso esperado: ',
+            secondText: '${summary3.totalExpectedWeight.toStringAsFixed(2)} kg',
           ),
-          const SizedBox(height: 16),
+
+          const SizedBox(height: AppSpacing.smallLarge),
           Text('Total registrado en bodega', style: textTheme.headlineSmall),
-          const SizedBox(height: 16),
-          Text(
-            'Canastillas registradas: ${summary3.totalRegisteredCount}',
-            style: textTheme.bodyLarge,
+          const SizedBox(height: AppSpacing.smallLarge),
+          CustomRichText(
+            firstText: 'Canastillas registradas: ',
+            secondText: '${summary3.totalRegisteredCount}',
           ),
-          Text(
-            'Peso registrado: ${summary3.totalRegisteredWeight.toStringAsFixed(2)} kg',
-            style: textTheme.bodyLarge,
+          CustomRichText(
+            firstText: 'Peso registrado: ',
+            secondText:
+                '${summary3.totalRegisteredWeight.toStringAsFixed(2)} kg',
           ),
           if (summary3.totalMissingCount != 0 ||
               summary3.totalMissingWeight != 0)
             Column(
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.smallLarge),
                 Text('Total Faltante', style: textTheme.headlineSmall),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.smallLarge),
 
                 if (summary3.totalMissingCount != 0)
                   Text(
@@ -74,7 +79,7 @@ class Stage5MissingWeight extends ConsumerWidget {
                   ),
               ],
             ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.smallMedium),
           _FormTotalToPay(
             projectId: projectId,
             totalRegisteredWeight: summary3.totalRegisteredWeight,
@@ -113,37 +118,50 @@ class __FormTotalToPayState extends ConsumerState<_FormTotalToPay> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(child: Text('Total a pagar', style: textTheme.headlineMedium)),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.smallMedium),
           Text('Valor por kilo', style: textTheme.headlineSmall),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.xSmall),
           AppFormTextFild(
             name: 'pricePerKilo',
             label: 'Valor por kilo:',
             keyboardType: TextInputType.number,
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(),
-              FormBuilderValidators.integer(),
+              FormBuilderValidators.numeric(),
               FormBuilderValidators.min(1),
             ]),
+            inputFormatters: [MoneyInputFormatter()],
+            valueTransformer: (text) {
+              if (text == null) return null;
+              return text.replaceAll(RegExp(r'[^0-9]'), '');
+            },
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.smallMedium),
           Text('Se realizaron abonos', style: textTheme.headlineSmall),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.xSmall),
           AppFormTextFild(
             name: 'installment',
             label: 'Se realizaron abonos:',
             keyboardType: TextInputType.number,
+            inputFormatters: [MoneyInputFormatter()],
+            valueTransformer: (text) {
+              if (text == null) return null;
+              return text.replaceAll(RegExp(r'[^0-9]'), '');
+            },
           ),
-          const SizedBox(height: 34),
+          const SizedBox(height: AppSpacing.medium),
           if (formState.data != null)
             Column(
               children: [
-                Text('Valor total: ${formState.totalToPay}'),
-                const SizedBox(height: 34),
+                CustomRichText(
+                  firstText: 'Valor total: ',
+                  secondText: '\$ ${moneyFormat(formState.totalToPay)}',
+                ),
+                const SizedBox(height: AppSpacing.medium),
               ],
             ),
           Center(
-            child: FloatingActionButton.extended(
+            child: ElevatedButton(
               onPressed: formState.status == Stage5PriceFormStatus.submitting
                   ? null
                   : () {
@@ -159,9 +177,11 @@ class __FormTotalToPayState extends ConsumerState<_FormTotalToPay> {
                         projectId: widget.projectId,
                         date: DateTime.now(),
                         pricePerKilo:
-                            int.tryParse(values['pricePerKilo'] ?? '0') ?? 0,
+                            double.tryParse(values['pricePerKilo'] ?? '0') ??
+                            0.0,
                         installment:
-                            int.tryParse(values['installment'] ?? '0') ?? 0,
+                            double.tryParse(values['installment'] ?? '0') ??
+                            0.0,
                       );
                       formNotifier.submit(
                         projectId: widget.projectId,
@@ -169,7 +189,7 @@ class __FormTotalToPayState extends ConsumerState<_FormTotalToPay> {
                         totalRegisteredWeight: widget.totalRegisteredWeight,
                       );
                     },
-              label: Text('Calcular', style: textTheme.headlineSmall),
+              child: Text('Calcular'),
             ),
           ),
         ],

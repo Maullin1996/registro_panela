@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:registro_panela/features/stage5_2_records/providers/stage52_load_provider.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
+import 'package:registro_panela/shared/widgets/custom_rich_text.dart';
 
 class Stage52SummaryPage extends ConsumerWidget {
   final String projectId;
@@ -20,24 +22,48 @@ class Stage52SummaryPage extends ConsumerWidget {
         .watch(stage52LoadProvider)
         .firstWhere((r) => r.id == recordId);
 
+    final textTheme = TextTheme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Detalle del registro')),
+      appBar: AppBar(
+        title: Text('Detalle del registro', style: textTheme.headlineMedium),
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.small,
+          AppSpacing.small,
+          AppSpacing.small,
+          AppSpacing.large,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (record.photoPath.isNotEmpty) Image.file(File(record.photoPath)),
-            const SizedBox(height: 16),
-            Text('Fecha: ${DateFormat.yMd().format(record.date)}'),
-            const SizedBox(height: 8),
-            Text('Gavera usada: ${record.gaveraWeight} g'),
-            const SizedBox(height: 8),
-            Text('Peso panela: ${record.panelaWeight.toStringAsFixed(2)} kg'),
-            const SizedBox(height: 8),
-            Text('Unidades: ${record.unitCount}'),
-            const SizedBox(height: 8),
-            Text('Calidad: ${record.quality.name.toUpperCase()}'),
+            const SizedBox(height: AppSpacing.smallLarge),
+            CustomRichText(
+              firstText: 'Fecha: ',
+              secondText: DateFormat.yMd().format(record.date),
+            ),
+            const SizedBox(height: AppSpacing.small),
+            CustomRichText(
+              firstText: 'Gavera usada: ',
+              secondText: '${record.gaveraWeight} g',
+            ),
+            const SizedBox(height: AppSpacing.small),
+            CustomRichText(
+              firstText: 'Peso panela: ',
+              secondText: '${record.panelaWeight.toStringAsFixed(2)} kg',
+            ),
+            const SizedBox(height: AppSpacing.small),
+            CustomRichText(
+              firstText: 'Unidades  de panela: ',
+              secondText: record.unitCount.toString(),
+            ),
+            const SizedBox(height: AppSpacing.small),
+            CustomRichText(
+              firstText: 'Calidad: ',
+              secondText: record.quality.name.toUpperCase(),
+            ),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
 
@@ -11,6 +12,8 @@ class AppFormTextFild extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   final void Function(String?)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
+  final Function(String?)? valueTransformer;
 
   const AppFormTextFild({
     super.key,
@@ -22,6 +25,8 @@ class AppFormTextFild extends StatelessWidget {
     this.keyboardType,
     this.validator,
     this.onChanged,
+    this.inputFormatters,
+    this.valueTransformer,
   });
 
   @override
@@ -56,6 +61,8 @@ class AppFormTextFild extends StatelessWidget {
         validator: validator,
         style: Theme.of(context).textTheme.bodyLarge,
         onChanged: onChanged,
+        inputFormatters: inputFormatters,
+        valueTransformer: valueTransformer,
       ),
     );
   }

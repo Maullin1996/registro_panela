@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:registro_panela/features/stage5_summary/providers/stage5_global_summary_provider.dart';
 import 'package:registro_panela/features/stage5_summary/providers/stage5_summary_provider.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
 
 class Stage5Summary extends ConsumerWidget {
   final String projectId;
@@ -19,7 +20,12 @@ class Stage5Summary extends ConsumerWidget {
         title: Text('Resumen de cargues', style: textTheme.headlineMedium),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.small,
+          AppSpacing.small,
+          AppSpacing.small,
+          AppSpacing.smallMedium,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -74,11 +80,11 @@ class Stage5Summary extends ConsumerWidget {
             ),
 
             // TOTAL GLOBAL
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.smallLarge),
             Center(
               child: Text('Total canastillas', style: textTheme.headlineMedium),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.xSmall),
             ...globalSummary.map((it) {
               return Center(
                 child: Text(

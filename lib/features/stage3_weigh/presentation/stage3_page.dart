@@ -10,8 +10,9 @@ import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dar
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_provider.dart';
 import 'package:registro_panela/features/stage3_weigh/domain/stage3_form_data.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_load_provider.dart';
-
-import '../../../shared/utils/colors.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
+import 'package:registro_panela/shared/widgets/custom_card.dart';
+import 'package:registro_panela/shared/widgets/custom_rich_text.dart';
 
 class Stage3Page extends ConsumerWidget {
   final String projectId;
@@ -43,10 +44,15 @@ class Stage3Page extends ConsumerWidget {
         leading: BackButton(onPressed: () => context.go(Routes.projects)),
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.small,
+          AppSpacing.small,
+          AppSpacing.small,
+          AppSpacing.medium,
+        ),
         itemCount: loads2.length,
         separatorBuilder: (BuildContext context, int index) {
-          return const SizedBox(height: 12);
+          return const SizedBox(height: AppSpacing.small);
         },
         itemBuilder: (BuildContext context, int index) {
           double sum = 0.0;
@@ -71,74 +77,75 @@ class Stage3Page extends ConsumerWidget {
 
           return GestureDetector(
             onTap: () => _onLoadTap(context, project, load2, entry),
-            child: Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16), // Bordes redondeados
-                side: BorderSide(
-                  color: AppColors.inputBorder, // Color del borde
-                  width: 2, // Grosor del borde
-                ),
-              ),
-              elevation: 2,
+            child: CustomCard(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacing.smallLarge),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Fecha: ${DateFormat.yMd().format(load2.date)}',
-                      style: textTheme.headlineSmall,
+                    Center(
+                      child: Text(
+                        'Registrado en Molienda',
+                        style: textTheme.headlineSmall,
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Registrado en Mlienda',
-                      style: textTheme.headlineSmall,
+                    const SizedBox(height: AppSpacing.small),
+                    CustomRichText(
+                      firstText: 'Fecha: ',
+                      secondText: DateFormat.yMd().format(load2.date),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Canastillas enviadas: $totalBaskets',
-                      style: textTheme.bodyLarge,
+
+                    const SizedBox(height: AppSpacing.xSmall),
+                    CustomRichText(
+                      firstText: 'Canastillas enviadas: ',
+                      secondText: totalBaskets.toString(),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Peso canastilla: ${group.realWeight.toStringAsFixed(2)} kg',
-                      style: textTheme.bodyLarge,
+                    const SizedBox(height: AppSpacing.xSmall),
+                    CustomRichText(
+                      firstText: 'Peso canastilla: ',
+                      secondText: '${group.realWeight.toStringAsFixed(2)} kg',
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Peso total esperado: ${totalRefkg.toStringAsFixed(2)} kg',
-                      style: textTheme.bodyLarge,
+                    const SizedBox(height: AppSpacing.xSmall),
+                    CustomRichText(
+                      firstText: 'Peso total esperado: ',
+                      secondText: '${totalRefkg.toStringAsFixed(2)} kg',
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Registrado en bodega',
-                      style: textTheme.headlineSmall,
+                    const SizedBox(height: AppSpacing.small),
+                    Center(
+                      child: Text(
+                        'Registrado en bodega',
+                        style: textTheme.headlineSmall,
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Canastillas registradas: $regCount',
-                      style: textTheme.bodyLarge,
+                    const SizedBox(height: AppSpacing.small),
+                    CustomRichText(
+                      firstText: 'Canastillas registradas: ',
+                      secondText: regCount.toString(),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Peso total registrado: ${regWeight.toStringAsFixed(2)} kg',
-                      style: textTheme.bodyLarge,
+
+                    const SizedBox(height: AppSpacing.xSmall),
+                    CustomRichText(
+                      firstText: 'Peso total registrado: ',
+                      secondText: '${regWeight.toStringAsFixed(2)} kg',
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Canastillas y Peso faltante',
-                      style: textTheme.headlineSmall,
+
+                    const SizedBox(height: AppSpacing.small),
+                    Center(
+                      child: Text(
+                        'Canastillas y Peso faltante',
+                        style: textTheme.headlineSmall,
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Faltan canastillas: $missingCount',
-                      style: textTheme.bodyLarge,
+                    const SizedBox(height: AppSpacing.small),
+                    CustomRichText(
+                      firstText: 'Faltan canastillas: ',
+                      secondText: missingCount.toString(),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Peso faltante: ${missingWeight.toStringAsFixed(2)}kg',
-                      style: textTheme.bodyLarge,
+
+                    const SizedBox(height: AppSpacing.small),
+                    CustomRichText(
+                      firstText: 'Peso faltante: ',
+                      secondText: '${missingWeight.toStringAsFixed(2)}kg',
                     ),
                   ],
                 ),

@@ -149,7 +149,7 @@ class Stage2Page extends ConsumerWidget {
             ),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
-        label: Text('Nuevo cargue', style: textTheme.headlineSmall),
+        label: Text('Nuevo cargue'),
         onPressed: () {
           showModalBottomSheet(
             context: context,

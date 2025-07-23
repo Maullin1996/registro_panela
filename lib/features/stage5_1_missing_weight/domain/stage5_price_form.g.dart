@@ -11,8 +11,8 @@ _Stage5PriceFormData _$Stage5PriceFormDataFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       projectId: json['projectId'] as String,
       date: DateTime.parse(json['date'] as String),
-      pricePerKilo: (json['pricePerKilo'] as num?)?.toInt() ?? 0,
-      installment: (json['installment'] as num?)?.toInt() ?? 0,
+      pricePerKilo: (json['pricePerKilo'] as num?)?.toDouble() ?? 0,
+      installment: (json['installment'] as num?)?.toDouble() ?? 0,
     );
 
 Map<String, dynamic> _$Stage5PriceFormDataToJson(

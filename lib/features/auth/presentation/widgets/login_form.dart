@@ -75,10 +75,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               ? Center(child: const CircularProgressIndicator())
               : Center(
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.blue[100]),
-                      elevation: WidgetStatePropertyAll(3),
-                    ),
                     onPressed: formState.isValid
                         ? () {
                             if (_fbkey.currentState?.saveAndValidate() ??
@@ -88,13 +84,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                           }
                         : null,
 
-                    child: const Text(
-                      'Iniciar sesión',
-                      style: TextStyle(
-                        fontSize: AppTypography.h3,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: const Text('Iniciar sesión'),
                   ),
                 ),
         ],

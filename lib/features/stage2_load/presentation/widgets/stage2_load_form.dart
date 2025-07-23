@@ -199,7 +199,7 @@ class _Stage2LoadFormState extends ConsumerState<Stage2LoadForm> {
                         width: 24,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Text('Guardar cargue', style: textTheme.headlineMedium),
+                    : Text('Guardar cargue'),
               ),
             ],
           ),

@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:registro_panela/shared/utils/colors.dart';
+import 'package:registro_panela/shared/utils/spacing.dart';
 import 'package:registro_panela/shared/utils/typography.dart';
 
 abstract class AppThemes {
   /// Light theme configuration.
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 153, 209, 255),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      extendedTextStyle: TextStyle(
+        fontFamily: AppTypography.familyRoboto,
+        fontSize: AppTypography.h3,
+        fontWeight: FontWeight.bold,
+      ),
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.colorElevatedButton,
+        elevation: 5,
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.medium,
+          vertical: AppSpacing.small,
+        ),
+        textStyle: TextStyle(
+          fontFamily: AppTypography.familyRoboto,
+          fontSize: AppTypography.h3,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.colorScheme),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: AppTypography.familyRoboto,
     textTheme: TextTheme(

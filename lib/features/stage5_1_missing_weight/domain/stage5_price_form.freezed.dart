@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Stage5PriceFormData {
 
- String get id; String get projectId; DateTime get date; int get pricePerKilo; int get installment;
+ String get id; String get projectId; DateTime get date; double get pricePerKilo; double get installment;
 /// Create a copy of Stage5PriceFormData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $Stage5PriceFormDataCopyWith<$Res>  {
   factory $Stage5PriceFormDataCopyWith(Stage5PriceFormData value, $Res Function(Stage5PriceFormData) _then) = _$Stage5PriceFormDataCopyWithImpl;
 @useResult
 $Res call({
- String id, String projectId, DateTime date, int pricePerKilo, int installment
+ String id, String projectId, DateTime date, double pricePerKilo, double installment
 });
 
 
@@ -71,8 +71,8 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,projectId: null == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,pricePerKilo: null == pricePerKilo ? _self.pricePerKilo : pricePerKilo // ignore: cast_nullable_to_non_nullable
-as int,installment: null == installment ? _self.installment : installment // ignore: cast_nullable_to_non_nullable
-as int,
+as double,installment: null == installment ? _self.installment : installment // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 
@@ -157,7 +157,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String projectId,  DateTime date,  int pricePerKilo,  int installment)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String projectId,  DateTime date,  double pricePerKilo,  double installment)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Stage5PriceFormData() when $default != null:
 return $default(_that.id,_that.projectId,_that.date,_that.pricePerKilo,_that.installment);case _:
@@ -178,7 +178,7 @@ return $default(_that.id,_that.projectId,_that.date,_that.pricePerKilo,_that.ins
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String projectId,  DateTime date,  int pricePerKilo,  int installment)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String projectId,  DateTime date,  double pricePerKilo,  double installment)  $default,) {final _that = this;
 switch (_that) {
 case _Stage5PriceFormData():
 return $default(_that.id,_that.projectId,_that.date,_that.pricePerKilo,_that.installment);case _:
@@ -198,7 +198,7 @@ return $default(_that.id,_that.projectId,_that.date,_that.pricePerKilo,_that.ins
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String projectId,  DateTime date,  int pricePerKilo,  int installment)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String projectId,  DateTime date,  double pricePerKilo,  double installment)?  $default,) {final _that = this;
 switch (_that) {
 case _Stage5PriceFormData() when $default != null:
 return $default(_that.id,_that.projectId,_that.date,_that.pricePerKilo,_that.installment);case _:
@@ -219,8 +219,8 @@ class _Stage5PriceFormData implements Stage5PriceFormData {
 @override final  String id;
 @override final  String projectId;
 @override final  DateTime date;
-@override@JsonKey() final  int pricePerKilo;
-@override@JsonKey() final  int installment;
+@override@JsonKey() final  double pricePerKilo;
+@override@JsonKey() final  double installment;
 
 /// Create a copy of Stage5PriceFormData
 /// with the given fields replaced by the non-null parameter values.
@@ -255,7 +255,7 @@ abstract mixin class _$Stage5PriceFormDataCopyWith<$Res> implements $Stage5Price
   factory _$Stage5PriceFormDataCopyWith(_Stage5PriceFormData value, $Res Function(_Stage5PriceFormData) _then) = __$Stage5PriceFormDataCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String projectId, DateTime date, int pricePerKilo, int installment
+ String id, String projectId, DateTime date, double pricePerKilo, double installment
 });
 
 
@@ -278,8 +278,8 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,projectId: null == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,pricePerKilo: null == pricePerKilo ? _self.pricePerKilo : pricePerKilo // ignore: cast_nullable_to_non_nullable
-as int,installment: null == installment ? _self.installment : installment // ignore: cast_nullable_to_non_nullable
-as int,
+as double,installment: null == installment ? _self.installment : installment // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 

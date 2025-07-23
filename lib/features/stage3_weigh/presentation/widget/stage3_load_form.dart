@@ -8,7 +8,6 @@ import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data
 import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';
 import 'package:registro_panela/features/stage3_weigh/domain/stage3_form_data.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_form_provider.dart';
-import 'package:registro_panela/shared/utils/colors.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:uuid/uuid.dart';
@@ -162,10 +161,7 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
                         child: ElevatedButton.icon(
                           onPressed: () => _pickImage(index),
                           icon: const Icon(Icons.camera_alt),
-                          label: Text(
-                            'Tomar foto',
-                            style: textTheme.headlineSmall,
-                          ),
+                          label: Text('Tomar foto'),
                         ),
                       ),
                       if (_photoPaths[index]?.isNotEmpty == true) ...[
@@ -226,10 +222,7 @@ class _Stage3LoadFormState extends ConsumerState<Stage3LoadForm> {
                     },
               child: formState.status == Stage3FormStatus.submitting
                   ? const CircularProgressIndicator()
-                  : Text(
-                      widget.isNew ? 'Register' : 'Actualizar',
-                      style: textTheme.headlineSmall,
-                    ),
+                  : Text(widget.isNew ? 'Register' : 'Actualizar'),
             ),
           ],
         ),

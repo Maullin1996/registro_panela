@@ -7,7 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_provider.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_load_provider.dart';
-import 'package:registro_panela/shared/utils/colors.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
+import 'package:registro_panela/shared/widgets/custom_card.dart';
+import 'package:registro_panela/shared/widgets/custom_rich_text.dart';
 
 class Stage3PageSummary extends ConsumerWidget {
   final String projectId;
@@ -56,51 +58,65 @@ class Stage3PageSummary extends ConsumerWidget {
         leading: BackButton(onPressed: () => context.pop()),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        padding: const EdgeInsets.symmetric(
+          vertical: AppSpacing.smallMedium,
+          horizontal: AppSpacing.smallLarge,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(project.name, style: textTheme.headlineMedium),
-            const SizedBox(height: 16),
+            Center(child: Text(project.name, style: textTheme.headlineMedium)),
+            const SizedBox(height: AppSpacing.medium),
 
-            Text(
-              'Fecha cargue: ${DateFormat.yMd().format(load2.date)}',
-              style: textTheme.headlineSmall,
+            Center(
+              child: Text(
+                'Registrado en molienda',
+                style: textTheme.headlineMedium,
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.small),
+            CustomRichText(
+              firstText: 'Fecha cargue: ',
+              secondText: DateFormat.yMd().format(load2.date),
+            ),
+            const SizedBox(height: AppSpacing.xSmall),
+            CustomRichText(
+              firstText: 'Peso esperado: ',
+              secondText: '${totalRefKg.toStringAsFixed(2)} kg',
+            ),
+            const SizedBox(height: AppSpacing.small),
+            Center(
+              child: Text(
+                'Registrado en bodega',
+                style: textTheme.headlineMedium,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.small),
+            CustomRichText(
+              firstText: 'Canastillas registradas: ',
+              secondText: regCount.toString(),
+            ),
 
-            Text('Registrado en molienda', style: textTheme.headlineSmall),
-            const SizedBox(height: 10),
-            // Totales esperados vs registrados
-            Text(
-              'Peso esperado: ${totalRefKg.toStringAsFixed(2)} kg',
-              style: textTheme.bodyLarge,
+            const SizedBox(height: AppSpacing.xSmall),
+            CustomRichText(
+              firstText: 'Peso registrado: ',
+              secondText: '${regWeight.toStringAsFixed(2)} kg',
             ),
-            const SizedBox(height: 8),
-            Text('Registrado en bodega', style: textTheme.headlineSmall),
-            const SizedBox(height: 10),
-            Text(
-              'Canastillas registradas: $regCount',
-              style: textTheme.bodyLarge,
+
+            const SizedBox(height: AppSpacing.small),
+            Center(child: Text('Faltantes', style: textTheme.headlineMedium)),
+            const SizedBox(height: AppSpacing.small),
+            CustomRichText(
+              firstText: 'Faltan canastillas: ',
+              secondText: missingCount.toString(),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Peso registrado: ${regWeight.toStringAsFixed(2)} kg',
-              style: textTheme.bodyLarge,
+
+            const SizedBox(height: AppSpacing.xSmall),
+            CustomRichText(
+              firstText: 'Peso faltante: ',
+              secondText: '${missingWeight.toStringAsFixed(2)} kg',
             ),
-            const SizedBox(height: 8),
-            Text('Faltantes', style: textTheme.headlineSmall),
-            const SizedBox(height: 10),
-            Text(
-              'Faltan canastillas: $missingCount',
-              style: textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Peso faltante: ${missingWeight.toStringAsFixed(2)} kg',
-              style: textTheme.bodyLarge,
-            ),
-            SizedBox(height: 34),
+            SizedBox(height: AppSpacing.medium),
 
             Center(
               child: Text(
@@ -108,46 +124,42 @@ class Stage3PageSummary extends ConsumerWidget {
                 style: textTheme.headlineMedium,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.smallLarge),
 
             // Listado de cada canastilla
             ...entry3.baskets.map((b) {
-              return Card(
-                margin: const EdgeInsets.only(bottom: 16),
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16), // Bordes redondeados
-                  side: BorderSide(
-                    color: AppColors.inputBorder, // Color del borde
-                    width: 2, // Grosor del borde
-                  ),
-                ),
-                elevation: 2,
+              return CustomCard(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppSpacing.smallLarge),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Canastilla #${b.sequence + 1}',
-                        style: textTheme.headlineMedium,
+                      Center(
+                        child: Text(
+                          'Canastilla #${b.sequence + 1}',
+                          style: textTheme.headlineMedium,
+                        ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Peso registrado: ${b.realWeight.toStringAsFixed(2)} kg',
-                        style: textTheme.bodyLarge,
+                      const SizedBox(height: AppSpacing.xSmall),
+                      CustomRichText(
+                        firstText: 'Peso registrado: ',
+                        secondText: '${b.realWeight.toStringAsFixed(2)} kg',
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Peso faltante: ${(load2.baskets.realWeight - b.realWeight).toStringAsFixed(2)} kg',
-                        style: textTheme.bodyLarge,
+
+                      const SizedBox(height: AppSpacing.xSmall),
+                      CustomRichText(
+                        firstText: 'Peso faltante: ',
+                        secondText:
+                            '${(load2.baskets.realWeight - b.realWeight).toStringAsFixed(2)} kg',
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Calidad: ${b.quality.name.toUpperCase()}',
-                        style: textTheme.bodyLarge,
+
+                      const SizedBox(height: AppSpacing.xSmall),
+                      CustomRichText(
+                        firstText: 'Calidad: ',
+                        secondText: b.quality.name.toUpperCase(),
                       ),
-                      const SizedBox(height: 8),
+
+                      const SizedBox(height: AppSpacing.xSmall),
                       if (b.photoPath.isNotEmpty)
                         Image.file(
                           File(b.photoPath),

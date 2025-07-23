@@ -47,7 +47,7 @@ class ProjectSelectorPage extends ConsumerWidget {
           AppSpacing.small,
           AppSpacing.smallLarge,
           AppRadius.small,
-          AppSpacing.largeSmall,
+          AppSpacing.large,
         ),
         itemCount: projects.length,
         itemBuilder: (context, i) {
