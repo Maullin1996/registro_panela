@@ -58,72 +58,87 @@ class Stage3PageSummary extends ConsumerWidget {
         leading: BackButton(onPressed: () => context.pop()),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          vertical: AppSpacing.smallMedium,
-          horizontal: AppSpacing.smallLarge,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.smallMedium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: Text(project.name, style: textTheme.headlineMedium)),
-            const SizedBox(height: AppSpacing.medium),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.smallLarge),
+              child: Column(
+                children: [
+                  Center(
+                    child: Text(project.name, style: textTheme.headlineMedium),
+                  ),
+                  const SizedBox(height: AppSpacing.medium),
 
-            Center(
-              child: Text(
-                'Registrado en molienda',
-                style: textTheme.headlineMedium,
+                  Center(
+                    child: Text(
+                      'Registrado en molienda',
+                      style: textTheme.headlineMedium,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.small),
+                  CustomRichText(
+                    icon: Icons.calendar_month,
+                    firstText: 'Fecha cargue: ',
+                    secondText: DateFormat.yMd().format(load2.date),
+                  ),
+                  const SizedBox(height: AppSpacing.xSmall),
+                  CustomRichText(
+                    icon: Icons.scale,
+                    firstText: 'Peso esperado: ',
+                    secondText: '${totalRefKg.toStringAsFixed(2)} kg',
+                  ),
+                  const SizedBox(height: AppSpacing.small),
+                  Center(
+                    child: Text(
+                      'Registrado en bodega',
+                      style: textTheme.headlineMedium,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.small),
+                  CustomRichText(
+                    icon: Icons.shopping_basket,
+                    firstText: 'Canastillas registradas: ',
+                    secondText: regCount.toString(),
+                  ),
+
+                  const SizedBox(height: AppSpacing.xSmall),
+                  CustomRichText(
+                    icon: Icons.scale,
+                    firstText: 'Peso registrado: ',
+                    secondText: '${regWeight.toStringAsFixed(2)} kg',
+                  ),
+
+                  const SizedBox(height: AppSpacing.small),
+                  Center(
+                    child: Text('Faltantes', style: textTheme.headlineMedium),
+                  ),
+                  const SizedBox(height: AppSpacing.small),
+                  CustomRichText(
+                    icon: Icons.shopping_basket,
+                    firstText: 'Faltan canastillas: ',
+                    secondText: missingCount.toString(),
+                  ),
+
+                  const SizedBox(height: AppSpacing.xSmall),
+                  CustomRichText(
+                    icon: Icons.scale,
+                    firstText: 'Peso faltante: ',
+                    secondText: '${missingWeight.toStringAsFixed(2)} kg',
+                  ),
+                  SizedBox(height: AppSpacing.medium),
+
+                  Center(
+                    child: Text(
+                      'Detalle por canastilla',
+                      style: textTheme.headlineMedium,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: AppSpacing.small),
-            CustomRichText(
-              firstText: 'Fecha cargue: ',
-              secondText: DateFormat.yMd().format(load2.date),
-            ),
-            const SizedBox(height: AppSpacing.xSmall),
-            CustomRichText(
-              firstText: 'Peso esperado: ',
-              secondText: '${totalRefKg.toStringAsFixed(2)} kg',
-            ),
-            const SizedBox(height: AppSpacing.small),
-            Center(
-              child: Text(
-                'Registrado en bodega',
-                style: textTheme.headlineMedium,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.small),
-            CustomRichText(
-              firstText: 'Canastillas registradas: ',
-              secondText: regCount.toString(),
-            ),
 
-            const SizedBox(height: AppSpacing.xSmall),
-            CustomRichText(
-              firstText: 'Peso registrado: ',
-              secondText: '${regWeight.toStringAsFixed(2)} kg',
-            ),
-
-            const SizedBox(height: AppSpacing.small),
-            Center(child: Text('Faltantes', style: textTheme.headlineMedium)),
-            const SizedBox(height: AppSpacing.small),
-            CustomRichText(
-              firstText: 'Faltan canastillas: ',
-              secondText: missingCount.toString(),
-            ),
-
-            const SizedBox(height: AppSpacing.xSmall),
-            CustomRichText(
-              firstText: 'Peso faltante: ',
-              secondText: '${missingWeight.toStringAsFixed(2)} kg',
-            ),
-            SizedBox(height: AppSpacing.medium),
-
-            Center(
-              child: Text(
-                'Detalle por canastilla',
-                style: textTheme.headlineMedium,
-              ),
-            ),
             const SizedBox(height: AppSpacing.smallLarge),
 
             // Listado de cada canastilla
@@ -142,12 +157,14 @@ class Stage3PageSummary extends ConsumerWidget {
                       ),
                       const SizedBox(height: AppSpacing.xSmall),
                       CustomRichText(
+                        icon: Icons.scale,
                         firstText: 'Peso registrado: ',
                         secondText: '${b.realWeight.toStringAsFixed(2)} kg',
                       ),
 
                       const SizedBox(height: AppSpacing.xSmall),
                       CustomRichText(
+                        icon: Icons.scale,
                         firstText: 'Peso faltante: ',
                         secondText:
                             '${(load2.baskets.realWeight - b.realWeight).toStringAsFixed(2)} kg',
@@ -155,6 +172,7 @@ class Stage3PageSummary extends ConsumerWidget {
 
                       const SizedBox(height: AppSpacing.xSmall),
                       CustomRichText(
+                        icon: Icons.verified,
                         firstText: 'Calidad: ',
                         secondText: b.quality.name.toUpperCase(),
                       ),

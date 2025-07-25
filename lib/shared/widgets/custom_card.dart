@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:registro_panela/shared/utils/colors.dart';
+import 'package:registro_panela/shared/utils/tokens.dart';
 
 class CustomCard extends StatelessWidget {
   final Widget child;
@@ -8,16 +8,17 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
+      margin: EdgeInsets.all(AppSpacing.smallLarge),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16), // Bordes redondeados
-        side: BorderSide(
-          color: AppColors.inputBorder, // Color del borde
-          width: 2, // Grosor del borde
-        ),
+        borderRadius: BorderRadius.circular(
+          AppRadius.large,
+        ), // Bordes redondeados
       ),
-      elevation: 2,
-      child: child,
+      elevation: 10,
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.small),
+        child: child,
+      ),
     );
   }
 }

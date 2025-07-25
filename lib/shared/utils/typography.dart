@@ -2,7 +2,7 @@ abstract class AppTypography {
   // Font Families
 
   /// Font family used for general text, usually for body text.
-  static const String familyRoboto = 'RobotoVariableItalic';
+  static const String familyRoboto = 'RobotoVariable';
 
   // Text Sizes
 

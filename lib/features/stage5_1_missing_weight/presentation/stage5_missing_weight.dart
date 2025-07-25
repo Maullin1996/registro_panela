@@ -35,10 +35,12 @@ class Stage5MissingWeight extends ConsumerWidget {
           Text('Total registrado en moliendas', style: textTheme.headlineSmall),
           const SizedBox(height: AppSpacing.smallLarge),
           CustomRichText(
+            icon: Icons.shopping_basket,
             firstText: 'Canastillas esperadas: ',
             secondText: '${summary3.totalExpectedCount}',
           ),
           CustomRichText(
+            icon: Icons.scale,
             firstText: 'Peso esperado: ',
             secondText: '${summary3.totalExpectedWeight.toStringAsFixed(2)} kg',
           ),
@@ -47,10 +49,12 @@ class Stage5MissingWeight extends ConsumerWidget {
           Text('Total registrado en bodega', style: textTheme.headlineSmall),
           const SizedBox(height: AppSpacing.smallLarge),
           CustomRichText(
+            icon: Icons.shopping_basket,
             firstText: 'Canastillas registradas: ',
             secondText: '${summary3.totalRegisteredCount}',
           ),
           CustomRichText(
+            icon: Icons.shopping_basket,
             firstText: 'Peso registrado: ',
             secondText:
                 '${summary3.totalRegisteredWeight.toStringAsFixed(2)} kg',
@@ -154,6 +158,7 @@ class __FormTotalToPayState extends ConsumerState<_FormTotalToPay> {
             Column(
               children: [
                 CustomRichText(
+                  icon: Icons.money_off,
                   firstText: 'Valor total: ',
                   secondText: '\$ ${moneyFormat(formState.totalToPay)}',
                 ),

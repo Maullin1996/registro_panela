@@ -146,11 +146,9 @@ class _Stage2LoadFormState extends ConsumerState<Stage2LoadForm> {
                       SizedBox(width: 16),
                       Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Canastillas',
-                              style: textTheme.headlineMedium,
-                            ),
+                            Text('Peso', style: textTheme.headlineMedium),
                             AppFormTextFild(
                               name: 'basketWeight',
                               label: 'Peso de referencia (kg)',

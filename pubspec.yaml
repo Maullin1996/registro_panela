@@ -41,3 +41,7 @@ flutter:
     - family: RobotoVariableItalic
       fonts:
         - asset: assets/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf
+          weight: 400
+          style: normal
+
+

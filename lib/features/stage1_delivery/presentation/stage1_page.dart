@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:registro_panela/core/router/routes.dart';
-import 'package:registro_panela/features/stage1_delivery/presentation/widgets/stage1_form.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_form_provider.dart'
-    hide Stage1Form;
+import 'package:registro_panela/features/stage1_delivery/presentation/widgets/stage1_load_form.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/stage1_form_provider.dart';
+
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
 
@@ -53,7 +53,7 @@ class Stage1Page extends ConsumerWidget {
             AppSpacing.small,
             AppSpacing.medium,
           ),
-          child: Stage1Form(initialData: project, isNew: isNew),
+          child: Stage1LoadForm(initialData: project, isNew: isNew),
         ),
       ),
     );

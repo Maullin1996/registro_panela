@@ -43,69 +43,80 @@ class ProjectSelectorPage extends ConsumerWidget {
         child: const Icon(Icons.add_outlined),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.small,
-          AppSpacing.smallLarge,
-          AppRadius.small,
-          AppSpacing.large,
-        ),
+        padding: const EdgeInsets.only(bottom: AppSpacing.large),
         itemCount: projects.length,
         itemBuilder: (context, i) {
           final p = projects[i];
-          return Container(
-            margin: EdgeInsets.only(bottom: AppSpacing.xSmall),
-            child: CustomCard(
-              child: ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+          return CustomCard(
+            child: ListTile(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(p.name, style: textTheme.headlineLarge),
+                      ),
+                      Text(
+                        DateFormat.yMd().format(p.date),
+                        style: textTheme.bodyLarge?.copyWith(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xSmall),
+                  const Divider(),
+                  const SizedBox(height: AppSpacing.xSmall),
+                  Row(
+                    children: [
+                      Icon(Icons.storage, size: 20.0),
+                      const SizedBox(width: AppSpacing.xSmall),
+                      Text('Gaveras', style: textTheme.headlineMedium),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.xSmall),
+                  ...List.generate(
+                    p.gaveras.length,
+                    (index) => Row(
                       children: [
-                        Expanded(
-                          child: Text(p.name, style: textTheme.headlineMedium),
-                        ),
                         Text(
-                          DateFormat.yMd().format(p.date),
-                          style: textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          '• Cantidad: ${p.gaveras[index].quantity} - Peso ${p.gaveras[index].referenceWeight} g',
+                          style: textTheme.bodyLarge,
                         ),
                       ],
                     ),
-                    SizedBox(height: AppSpacing.xSmall),
-                    Text(
-                      'Gaveras suministradas',
-                      style: textTheme.headlineSmall,
-                    ),
-                    SizedBox(height: AppSpacing.xSmall),
-                    ...List.generate(
-                      p.gaveras.length,
-                      (index) => Text(
-                        '${p.gaveras[index].quantity} de Gavera ${p.gaveras[index].referenceWeight} g',
-                      ),
-                    ),
-                    SizedBox(height: AppSpacing.xSmall),
-                    Text(
-                      'Cantidad de canastillas',
-                      style: textTheme.headlineSmall,
-                    ),
-                    SizedBox(height: AppSpacing.xSmall),
-                    Text('se suministraron ${p.basketsQuantity} canastillas'),
-                    SizedBox(height: AppSpacing.xSmall),
-                    Text('Numero de contacto', style: textTheme.headlineSmall),
-                    SizedBox(height: AppSpacing.xSmall),
-                    Text(p.phone),
-                  ],
-                ),
-                onTap: () {
-                  if (user?.role == UserRole.admin) {
-                    _showAdminStageSelector(context, p.id);
-                  } else {
-                    final route = _routeForRole(user!.role);
-                    context.go('$route/${p.id}');
-                  }
-                },
+                  ),
+                  SizedBox(height: AppSpacing.xSmall),
+                  Row(
+                    children: [
+                      Icon(Icons.shopping_basket, size: 20),
+                      const SizedBox(width: AppSpacing.xSmall),
+                      Text('Canastillas:', style: textTheme.headlineMedium),
+                      const SizedBox(width: AppSpacing.xSmall),
+                      Text('${p.basketsQuantity}'),
+                    ],
+                  ),
+                  SizedBox(height: AppSpacing.xSmall),
+
+                  SizedBox(height: AppSpacing.xSmall),
+                  Row(
+                    children: [
+                      Icon(Icons.phone, size: 20),
+                      const SizedBox(width: AppSpacing.xSmall),
+                      Text('Contacto:', style: textTheme.headlineMedium),
+                      const SizedBox(width: AppSpacing.xSmall),
+                      Text(p.phone),
+                    ],
+                  ),
+                ],
               ),
+              onTap: () {
+                if (user?.role == UserRole.admin) {
+                  _showAdminStageSelector(context, p.id);
+                } else {
+                  final route = _routeForRole(user!.role);
+                  context.go('$route/${p.id}');
+                }
+              },
             ),
           );
         },

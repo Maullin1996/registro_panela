@@ -57,16 +57,9 @@ class Stage2Page extends ConsumerWidget {
       ),
       body: loads.isEmpty
           ? const Center(child: Text('Aún no hay cargues registrados'))
-          : ListView.separated(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.small,
-                AppSpacing.small,
-                AppSpacing.small,
-                AppSpacing.medium,
-              ),
+          : ListView.builder(
+              padding: const EdgeInsets.only(bottom: AppSpacing.medium),
               itemCount: loads.length,
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: AppSpacing.smallLarge),
               itemBuilder: (BuildContext context, int index) {
                 final load = loads[index];
                 return GestureDetector(
@@ -112,36 +105,37 @@ class Stage2Page extends ConsumerWidget {
                     );
                   },
                   child: CustomCard(
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppSpacing.smallLarge),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomRichText(
-                            firstText: 'Fecha: ',
-                            secondText: DateFormat.yMd().format(load.date),
-                          ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomRichText(
+                          icon: Icons.calendar_month,
+                          firstText: 'Fecha: ',
+                          secondText: DateFormat.yMd().format(load.date),
+                        ),
 
-                          const SizedBox(height: AppSpacing.xSmall),
-                          CustomRichText(
-                            firstText: 'Cantidad de canastillas: ',
-                            secondText: load.baskets.count.toString(),
-                          ),
+                        const SizedBox(height: AppSpacing.xSmall),
+                        CustomRichText(
+                          icon: Icons.shopping_basket,
+                          firstText: 'Canastillas: ',
+                          secondText: load.baskets.count.toString(),
+                        ),
 
-                          const SizedBox(height: AppSpacing.xSmall),
-                          CustomRichText(
-                            firstText: 'Peso de referencia: ',
-                            secondText:
-                                '${load.baskets.realWeight.toStringAsFixed(2)} kg',
-                          ),
+                        const SizedBox(height: AppSpacing.xSmall),
+                        CustomRichText(
+                          icon: Icons.scale,
+                          firstText: 'Peso: ',
+                          secondText:
+                              '${load.baskets.realWeight.toStringAsFixed(2)} kg',
+                        ),
 
-                          const SizedBox(height: AppSpacing.xSmall),
-                          CustomRichText(
-                            firstText: 'Peso gavera: ',
-                            secondText: '${load.baskets.referenceWeight} g',
-                          ),
-                        ],
-                      ),
+                        const SizedBox(height: AppSpacing.xSmall),
+                        CustomRichText(
+                          icon: Icons.storage_outlined,
+                          firstText: 'Gavera: ',
+                          secondText: '${load.baskets.referenceWeight} g',
+                        ),
+                      ],
                     ),
                   ),
                 );

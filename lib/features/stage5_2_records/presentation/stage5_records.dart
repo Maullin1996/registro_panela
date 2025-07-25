@@ -46,18 +46,22 @@ class Stage52Page extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomRichText(
+                    icon: Icons.unarchive_outlined,
                     firstText: 'Unidades de panela: ',
                     secondText: r.unitCount.toString(),
                   ),
                   CustomRichText(
+                    icon: Icons.scale,
                     firstText: 'Peso paquete: ',
                     secondText: '${r.gaveraWeight.toStringAsFixed(0)}g',
                   ),
                   CustomRichText(
+                    icon: Icons.storage_outlined,
                     firstText: 'Gavera: ',
                     secondText: '${r.panelaWeight.toStringAsFixed(2)} kg',
                   ),
                   CustomRichText(
+                    icon: Icons.verified,
                     firstText: 'Calidad: ',
                     secondText: r.quality.name.toUpperCase(),
                   ),

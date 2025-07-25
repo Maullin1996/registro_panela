@@ -11,16 +11,16 @@ import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_form_provider.dart';
 import 'package:uuid/uuid.dart';
 
-class Stage1Form extends ConsumerStatefulWidget {
+class Stage1LoadForm extends ConsumerStatefulWidget {
   final Stage1FormData? initialData;
   final bool isNew;
-  const Stage1Form({required this.isNew, this.initialData, super.key});
+  const Stage1LoadForm({required this.isNew, this.initialData, super.key});
 
   @override
-  ConsumerState<Stage1Form> createState() => _Stage1FormState();
+  ConsumerState<Stage1LoadForm> createState() => _Stage1FormState();
 }
 
-class _Stage1FormState extends ConsumerState<Stage1Form> {
+class _Stage1FormState extends ConsumerState<Stage1LoadForm> {
   late final GlobalKey<FormBuilderState> _formKey;
   late final List<int> _gaveras;
   String? _fotoPath;

@@ -34,34 +34,28 @@ abstract class AppThemes {
     fontFamily: AppTypography.familyRoboto,
     textTheme: TextTheme(
       headlineLarge: TextStyle(
-        fontSize: AppTypography.h1,
+        fontSize: AppTypography.h2,
         fontWeight: FontWeight.w800,
-        fontStyle: FontStyle.normal,
       ),
       headlineMedium: TextStyle(
-        fontSize: AppTypography.h2,
-        fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.italic,
-      ),
-      headlineSmall: TextStyle(
         fontSize: AppTypography.h3,
         fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.italic,
+      ),
+      headlineSmall: TextStyle(
+        fontSize: AppTypography.h4,
+        fontWeight: FontWeight.w700,
       ),
       bodyLarge: TextStyle(
         fontSize: AppTypography.body,
         fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.italic,
       ),
       bodyMedium: TextStyle(
         fontSize: AppTypography.h4,
         fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.italic,
       ),
       bodySmall: TextStyle(
         fontSize: AppTypography.h5,
         fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.italic,
       ),
     ),
   );

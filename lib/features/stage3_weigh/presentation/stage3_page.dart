@@ -44,12 +44,7 @@ class Stage3Page extends ConsumerWidget {
         leading: BackButton(onPressed: () => context.go(Routes.projects)),
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.small,
-          AppSpacing.small,
-          AppSpacing.small,
-          AppSpacing.medium,
-        ),
+        padding: const EdgeInsets.only(bottom: AppSpacing.medium),
         itemCount: loads2.length,
         separatorBuilder: (BuildContext context, int index) {
           return const SizedBox(height: AppSpacing.small);
@@ -91,22 +86,26 @@ class Stage3Page extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.small),
                     CustomRichText(
+                      icon: Icons.calendar_month,
                       firstText: 'Fecha: ',
                       secondText: DateFormat.yMd().format(load2.date),
                     ),
 
                     const SizedBox(height: AppSpacing.xSmall),
                     CustomRichText(
+                      icon: Icons.shopping_basket,
                       firstText: 'Canastillas enviadas: ',
                       secondText: totalBaskets.toString(),
                     ),
                     const SizedBox(height: AppSpacing.xSmall),
                     CustomRichText(
+                      icon: Icons.scale,
                       firstText: 'Peso canastilla: ',
                       secondText: '${group.realWeight.toStringAsFixed(2)} kg',
                     ),
                     const SizedBox(height: AppSpacing.xSmall),
                     CustomRichText(
+                      icon: Icons.scale,
                       firstText: 'Peso total esperado: ',
                       secondText: '${totalRefkg.toStringAsFixed(2)} kg',
                     ),
@@ -119,12 +118,14 @@ class Stage3Page extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.small),
                     CustomRichText(
+                      icon: Icons.shopping_basket,
                       firstText: 'Canastillas registradas: ',
                       secondText: regCount.toString(),
                     ),
 
                     const SizedBox(height: AppSpacing.xSmall),
                     CustomRichText(
+                      icon: Icons.shopping_basket,
                       firstText: 'Peso total registrado: ',
                       secondText: '${regWeight.toStringAsFixed(2)} kg',
                     ),
@@ -138,12 +139,14 @@ class Stage3Page extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.small),
                     CustomRichText(
+                      icon: Icons.shopping_basket,
                       firstText: 'Faltan canastillas: ',
                       secondText: missingCount.toString(),
                     ),
 
                     const SizedBox(height: AppSpacing.small),
                     CustomRichText(
+                      icon: Icons.scale,
                       firstText: 'Peso faltante: ',
                       secondText: '${missingWeight.toStringAsFixed(2)}kg',
                     ),
