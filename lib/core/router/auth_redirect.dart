@@ -1,39 +1,51 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:registro_panela/core/router/routes.dart';
-import 'package:registro_panela/features/auth/domin/auth_status.dart';
-import 'package:registro_panela/features/auth/domin/authenticated_user.dart';
+import 'package:registro_panela/features/auth/domin/enums/auth_status.dart';
+import 'package:registro_panela/features/auth/domin/enums/user_role.dart';
 import '../../features/auth/providers/auth_provider.dart';
 
 /// Control de acceso por estado de auth y rol
 String? authRedirect(Ref ref, GoRouterState state) {
   final auth = ref.read(authProvider);
-  final user = auth.user;
-  final authStatus = auth.authStatus;
   final path = state.uri.path;
+  final isChecking = auth.authStatus == AuthStatus.checking;
+  final isAuth = auth.authStatus == AuthStatus.authenticated;
+  final isAnon = auth.authStatus == AuthStatus.notAuthenticated;
 
-  if (authStatus == AuthStatus.checking) return '/splash';
+  if (isChecking) {
+    return '/splash';
+  }
 
-  if (authStatus == AuthStatus.notAuthenticated && path != Routes.login) {
+  if (isAnon && path != Routes.login) {
     return Routes.login;
   }
 
-  if (authStatus == AuthStatus.authenticated && path == Routes.login) {
+  if (isAuth && path == Routes.login) {
     return Routes.projects;
   }
 
-  final routeRoles = <String, UserRole>{
-    Routes.stage1: UserRole.stage1,
-    Routes.stage2: UserRole.stage2,
-    Routes.stage3: UserRole.stage3,
-    Routes.stage4: UserRole.stage4,
-    Routes.stage5: UserRole.stage5,
+  final roleByName = <String, UserRole>{
+    'stage1': UserRole.stage1,
+    'stage2Detail': UserRole.stage2,
+    'stage3Detail': UserRole.stage3,
+    'stage3Form': UserRole.stage3,
+    'stage3Summary': UserRole.stage3,
+    'stage4Detail': UserRole.stage4,
+    'stage5page': UserRole.stage5,
+    'stage5summary': UserRole.stage5,
+    'stage5report': UserRole.stage5,
+    'stage5records': UserRole.stage5,
+    'stage52form': UserRole.stage5,
+    'stage52summary': UserRole.stage5,
   };
 
-  final requiredRole = routeRoles[path];
+  final routeName = state.name;
+  final requiredRole = routeName != null ? roleByName[routeName] : null;
+
   if (requiredRole != null &&
-      user?.role != requiredRole &&
-      user?.role != UserRole.admin) {
+      auth.user?.role != requiredRole &&
+      auth.user?.role != UserRole.admin) {
     return Routes.projects;
   }
 

@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:registro_panela/core/router/routes.dart';
-import 'package:registro_panela/features/auth/domin/auth_status.dart';
+import 'package:registro_panela/features/auth/domin/entities/auth_status.dart';
+import 'package:registro_panela/features/auth/domin/enums/auth_status.dart';
 import 'package:registro_panela/features/auth/providers/auth_provider.dart';
 import 'package:registro_panela/features/auth/providers/login_form_provider.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
@@ -39,6 +40,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
     final formState = ref.watch(loginFormProvider);
     final formNotifier = ref.read(loginFormProvider.notifier);
+    final authNotifier = ref.read(authProvider.notifier);
+
     return FormBuilder(
       key: _fbkey,
       child: Column(
@@ -76,10 +79,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               : Center(
                   child: ElevatedButton(
                     onPressed: formState.isValid
-                        ? () {
+                        ? () async {
                             if (_fbkey.currentState?.saveAndValidate() ??
                                 false) {
-                              formNotifier.submit();
+                              await authNotifier.login(
+                                email: formState.email,
+                                password: formState.password,
+                              );
                             }
                           }
                         : null,

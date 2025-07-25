@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "55019937253",
+    "project_id": "registro-panela",
+    "storage_bucket": "registro-panela.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55019937253:android:507b13425535451eeb630c",
+        "android_client_info": {
+          "package_name": "com.example.registro_panela"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM7vPO0QyY2-sAmSuzIR_Mr94NB5CgyZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

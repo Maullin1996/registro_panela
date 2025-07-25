@@ -37,13 +37,13 @@ class LoginForm extends _$LoginForm {
   }
 
   Future<void> submit() async {
-    // marca que estamos enviando
     state = state.copyWith(isSubmitting: true);
-    // si tu login va a ser async con API real, await aquí
-    await Future.delayed(const Duration(milliseconds: 300));
-    ref
-        .read(authProvider.notifier)
-        .login(email: state.email, password: state.password);
+
+    try {
+      await ref
+          .read(authProvider.notifier)
+          .login(email: state.email, password: state.password);
+    } catch (_) {}
     state = state.copyWith(isSubmitting: false);
   }
 }

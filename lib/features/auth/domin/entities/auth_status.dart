@@ -1,6 +1,5 @@
-import 'package:registro_panela/features/auth/domin/authenticated_user.dart';
-
-enum AuthStatus { checking, authenticated, notAuthenticated }
+import 'package:registro_panela/features/auth/domin/entities/authenticated_user.dart';
+import 'package:registro_panela/features/auth/domin/enums/auth_status.dart';
 
 class AuthParams {
   final AuthenticatedUser? user;

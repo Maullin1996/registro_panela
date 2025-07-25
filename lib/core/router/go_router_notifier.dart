@@ -6,6 +6,6 @@ class GoRouterNotifier extends ChangeNotifier {
   final Ref ref;
 
   GoRouterNotifier(this.ref) {
-    ref.listen(authProvider, (_, __) => notifyListeners());
+    ref.read(authProvider.notifier).checkAuthStatus();
   }
 }

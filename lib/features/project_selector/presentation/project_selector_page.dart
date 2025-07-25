@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:registro_panela/core/router/routes.dart';
-import 'package:registro_panela/features/auth/domin/authenticated_user.dart';
+import 'package:registro_panela/features/auth/domin/entities/auth_status.dart';
+import 'package:registro_panela/features/auth/domin/enums/auth_status.dart';
+import 'package:registro_panela/features/auth/domin/enums/user_role.dart';
 import 'package:registro_panela/features/auth/providers/auth_provider.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
@@ -14,6 +16,18 @@ class ProjectSelectorPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AuthParams>(authProvider, (previous, next) {
+      if (previous?.authStatus != next.authStatus) {
+        if (next.authStatus == AuthStatus.notAuthenticated) {
+          context.go(Routes.login);
+        } else if (next.errorMessage?.isNotEmpty == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('No se pudo cerrar el usuario')),
+          );
+        }
+      }
+    });
+
     final projects = ref.watch(stage1ProjectsProvider);
     final user = ref.watch(authProvider).user;
     final textTheme = TextTheme.of(context);
@@ -21,7 +35,10 @@ class ProjectSelectorPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.logout, size: 30)),
+          IconButton(
+            onPressed: () => ref.read(authProvider.notifier).logout(),
+            icon: Icon(Icons.logout, size: 30),
+          ),
         ],
         title: Text('Seleccionar Proyecto', style: textTheme.headlineLarge),
       ),
@@ -159,30 +176,36 @@ class ProjectSelectorPage extends ConsumerWidget {
             ),
             child: ListView(
               controller: scrollController,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(
+                vertical: AppSpacing.smallLarge,
+              ),
               children: [
                 SizedBox(height: AppSpacing.mediumLarge),
                 for (var stage = 1; stage <= 5; stage++)
                   Padding(
-                    padding: const EdgeInsets.all(AppSpacing.small),
-                    child: ListTile(
-                      contentPadding: EdgeInsetsGeometry.all(AppSpacing.small),
-                      dense: true,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          16,
-                        ), // Bordes redondeados
-                        side: BorderSide(
-                          color: AppColors.inputBorder, // Color del borde
-                          width: 2, // Grosor del borde
+                    padding: const EdgeInsets.all(AppSpacing.smallLarge),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 226, 230, 231),
+                        borderRadius: BorderRadius.circular(AppRadius.large),
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsetsGeometry.all(
+                          AppSpacing.small,
                         ),
+                        dense: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            16,
+                          ), // Bordes redondeados
+                        ),
+                        leading: Icon(_iconForStage(stage), size: 30),
+                        title: Text(
+                          _stageName(stage),
+                          style: TextTheme.of(context).headlineMedium,
+                        ),
+                        onTap: () => context.go('${byStage(stage)}/$projectId'),
                       ),
-                      leading: Icon(_iconForStage(stage), size: 30),
-                      title: Text(
-                        'Etapa $stage',
-                        style: TextTheme.of(context).headlineLarge,
-                      ),
-                      onTap: () => context.go('${byStage(stage)}/$projectId'),
                     ),
                   ),
               ],
@@ -207,6 +230,23 @@ class ProjectSelectorPage extends ConsumerWidget {
         return AppIcons.summarize;
       default:
         return Icons.help;
+    }
+  }
+
+  String _stageName(int stage) {
+    switch (stage) {
+      case 1:
+        return 'Entrega';
+      case 2:
+        return 'Cargue';
+      case 3:
+        return 'Pesado';
+      case 4:
+        return 'Recogida molienda';
+      case 5:
+        return 'Liquidación';
+      default:
+        return 'No encontrado';
     }
   }
 }

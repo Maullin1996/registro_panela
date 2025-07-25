@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:registro_panela/core/router/auth_redirect.dart';
@@ -27,8 +28,13 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) => authRedirect(ref, state),
 
     routes: [
-      GoRoute(path: Routes.login, builder: (_, __) => const LoginPage()),
       GoRoute(
+        name: 'login',
+        path: Routes.login,
+        builder: (_, __) => const LoginPage(),
+      ),
+      GoRoute(
+        name: 'projects',
         path: Routes.projects,
         builder: (_, __) => const ProjectSelectorPage(),
       ),
@@ -55,25 +61,28 @@ final routerProvider = Provider<GoRouter>((ref) {
           final projectId = state.pathParameters['projectId']!;
           return Stage3Page(projectId: projectId);
         },
+        routes: [
+          GoRoute(
+            name: 'stage3Form',
+            path: ':load2Id/form',
+            builder: (context, state) {
+              final projectId = state.pathParameters['projectId']!;
+              final load2Id = state.pathParameters['load2Id']!;
+              return Stage3FormPage(projectId: projectId, load2Id: load2Id);
+            },
+          ),
+          GoRoute(
+            name: 'stage3Summary',
+            path: '/:load2Id/summary',
+            builder: (context, state) {
+              final projectId = state.pathParameters['projectId']!;
+              final load2Id = state.pathParameters['load2Id']!;
+              return Stage3PageSummary(load2Id: load2Id, projectId: projectId);
+            },
+          ),
+        ],
       ),
-      GoRoute(
-        name: 'stage3Form',
-        path: '${Routes.stage3}/:projectId/:load2Id/form',
-        builder: (context, state) {
-          final projectId = state.pathParameters['projectId']!;
-          final load2Id = state.pathParameters['load2Id']!;
-          return Stage3FormPage(projectId: projectId, load2Id: load2Id);
-        },
-      ),
-      GoRoute(
-        name: 'stage3Summary',
-        path: '${Routes.stage3}/:projectId/:load2Id/summary',
-        builder: (context, state) {
-          final projectId = state.pathParameters['projectId']!;
-          final load2Id = state.pathParameters['load2Id']!;
-          return Stage3PageSummary(load2Id: load2Id, projectId: projectId);
-        },
-      ),
+
       GoRoute(
         name: 'stage4Detail',
         path: '${Routes.stage4}/:projectId',
@@ -89,47 +98,59 @@ final routerProvider = Provider<GoRouter>((ref) {
           final projectId = state.pathParameters['projectId']!;
           return Stage5Page(projectId: projectId);
         },
+        routes: [
+          GoRoute(
+            name: 'stage5summary',
+            path: 'summary',
+            builder: (context, state) {
+              final projectId = state.pathParameters['projectId']!;
+              return Stage5Summary(projectId: projectId);
+            },
+          ),
+          GoRoute(
+            name: 'stage5report',
+            path: 'report',
+            builder: (context, state) {
+              final projectId = state.pathParameters['projectId']!;
+              return Stage5MissingWeight(projectId: projectId);
+            },
+          ),
+          GoRoute(
+            name: 'stage5records',
+            path: 'records',
+            builder: (context, state) {
+              final projectId = state.pathParameters['projectId']!;
+              return Stage52Page(projectId: projectId);
+            },
+            routes: [
+              GoRoute(
+                name: 'stage52form',
+                path: 'form',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId']!;
+                  return Stage52FormPage(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                name: 'stage52summary',
+                path: ':recordId/summary',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId']!;
+                  final recordId = state.pathParameters['recordId']!;
+                  return Stage52SummaryPage(
+                    projectId: projectId,
+                    recordId: recordId,
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
       ),
+
       GoRoute(
-        name: 'stage5summary',
-        path: '${Routes.stage5}/:projectId/summary',
-        builder: (context, state) {
-          final projectId = state.pathParameters['projectId']!;
-          return Stage5Summary(projectId: projectId);
-        },
-      ),
-      GoRoute(
-        name: 'stage5report',
-        path: '${Routes.stage5}/:projectId/report',
-        builder: (context, state) {
-          final projectId = state.pathParameters['projectId']!;
-          return Stage5MissingWeight(projectId: projectId);
-        },
-      ),
-      GoRoute(
-        name: 'stage5records',
-        path: '${Routes.stage5}/:projectId/records',
-        builder: (context, state) {
-          final projectId = state.pathParameters['projectId']!;
-          return Stage52Page(projectId: projectId);
-        },
-      ),
-      GoRoute(
-        name: 'stage52form',
-        path: '${Routes.stage5}/:projectId/records/form',
-        builder: (context, state) {
-          final projectId = state.pathParameters['projectId']!;
-          return Stage52FormPage(projectId: projectId);
-        },
-      ),
-      GoRoute(
-        name: 'stage52summary',
-        path: '${Routes.stage5}/:projectId/records/:recordId/summary',
-        builder: (context, state) {
-          final projectId = state.pathParameters['projectId']!;
-          final recordId = state.pathParameters['recordId']!;
-          return Stage52SummaryPage(projectId: projectId, recordId: recordId);
-        },
+        path: '/splash',
+        builder: (_, __) => const Center(child: CircularProgressIndicator()),
       ),
     ],
   );
