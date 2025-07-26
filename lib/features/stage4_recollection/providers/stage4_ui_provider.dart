@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/stage1_project_by_id_provider.dart';
 import 'package:registro_panela/features/stage4_recollection/domin/stage4_form_data.dart';
 import 'package:registro_panela/features/stage4_recollection/domin/stage4_ui_state.dart';
 import 'package:registro_panela/features/stage4_recollection/providers/stage4_load_provider.dart';
@@ -15,9 +15,7 @@ class Stage4Ui extends _$Stage4Ui {
         .watch(stage4LoadProvider)
         .firstWhereOrNull((e) => e.projectId == projectId);
 
-    final project = ref
-        .watch(stage1ProjectsProvider)
-        .firstWhere((project) => project.id == projectId);
+    final project = ref.watch(stage1ProjectByIdProvider(projectId))!;
 
     final initialGaveras = project.gaveras
         .map(

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:registro_panela/core/router/routes.dart';
-import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data.dart';
+import 'package:registro_panela/features/stage1_delivery/domain/entities/stage1_form_data.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';

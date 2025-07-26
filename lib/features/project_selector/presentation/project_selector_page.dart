@@ -7,7 +7,7 @@ import 'package:registro_panela/features/auth/domin/entities/auth_status.dart';
 import 'package:registro_panela/features/auth/domin/enums/auth_status.dart';
 import 'package:registro_panela/features/auth/domin/enums/user_role.dart';
 import 'package:registro_panela/features/auth/providers/auth_provider.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/index.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/custom_card.dart';
 
@@ -28,7 +28,8 @@ class ProjectSelectorPage extends ConsumerWidget {
       }
     });
 
-    final projects = ref.watch(stage1ProjectsProvider);
+    final projects = ref.watch(syncStage1ProjectsProvider);
+    final error = ref.watch(stage1ProjectsErrorProvider);
     final user = ref.watch(authProvider).user;
     final textTheme = TextTheme.of(context);
 
@@ -59,85 +60,113 @@ class ProjectSelectorPage extends ConsumerWidget {
         },
         child: const Icon(Icons.add_outlined),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.only(bottom: AppSpacing.large),
-        itemCount: projects.length,
-        itemBuilder: (context, i) {
-          final p = projects[i];
-          return CustomCard(
-            child: ListTile(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: (error != null)
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(p.name, style: textTheme.headlineLarge),
-                      ),
-                      Text(
-                        DateFormat.yMd().format(p.date),
-                        style: textTheme.bodyLarge?.copyWith(),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.xSmall),
-                  const Divider(),
-                  const SizedBox(height: AppSpacing.xSmall),
-                  Row(
-                    children: [
-                      Icon(Icons.storage, size: 20.0),
-                      const SizedBox(width: AppSpacing.xSmall),
-                      Text('Gaveras', style: textTheme.headlineMedium),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.xSmall),
-                  ...List.generate(
-                    p.gaveras.length,
-                    (index) => Row(
-                      children: [
-                        Text(
-                          '• Cantidad: ${p.gaveras[index].quantity} - Peso ${p.gaveras[index].referenceWeight} g',
-                          style: textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: AppSpacing.xSmall),
-                  Row(
-                    children: [
-                      Icon(Icons.shopping_basket, size: 20),
-                      const SizedBox(width: AppSpacing.xSmall),
-                      Text('Canastillas:', style: textTheme.headlineMedium),
-                      const SizedBox(width: AppSpacing.xSmall),
-                      Text('${p.basketsQuantity}'),
-                    ],
-                  ),
-                  SizedBox(height: AppSpacing.xSmall),
-
-                  SizedBox(height: AppSpacing.xSmall),
-                  Row(
-                    children: [
-                      Icon(Icons.phone, size: 20),
-                      const SizedBox(width: AppSpacing.xSmall),
-                      Text('Contacto:', style: textTheme.headlineMedium),
-                      const SizedBox(width: AppSpacing.xSmall),
-                      Text(p.phone),
-                    ],
+                  Icon(Icons.error_outline, size: 64, color: Colors.red),
+                  SizedBox(height: 16),
+                  Text('Ocurrió un error al cargar los proyectos'),
+                  SizedBox(height: 8),
+                  Text(error, style: TextStyle(color: Colors.grey)),
+                  SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () =>
+                        ref.read(stage1ProjectsProvider.notifier).refresh(),
+                    icon: Icon(Icons.refresh),
+                    label: Text('Reintentar'),
                   ),
                 ],
               ),
-              onTap: () {
-                if (user?.role == UserRole.admin) {
-                  _showAdminStageSelector(context, p.id);
-                } else {
-                  final route = _routeForRole(user!.role);
-                  context.go('$route/${p.id}');
-                }
+            )
+          : (projects.isEmpty)
+          ? const Center(child: Text('No hay proyectos disponibles.'))
+          : ListView.builder(
+              padding: const EdgeInsets.only(bottom: AppSpacing.large),
+              itemCount: projects.length,
+              itemBuilder: (context, i) {
+                final p = projects[i];
+                return CustomCard(
+                  child: ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                p.name,
+                                style: textTheme.headlineLarge,
+                              ),
+                            ),
+                            Text(
+                              DateFormat.yMd().format(p.date),
+                              style: textTheme.bodyLarge?.copyWith(),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.xSmall),
+                        const Divider(),
+                        const SizedBox(height: AppSpacing.xSmall),
+                        Row(
+                          children: [
+                            Icon(Icons.storage, size: 20.0),
+                            const SizedBox(width: AppSpacing.xSmall),
+                            Text('Gaveras', style: textTheme.headlineMedium),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.xSmall),
+                        ...List.generate(
+                          p.gaveras.length,
+                          (index) => Row(
+                            children: [
+                              Text(
+                                '• Cantidad: ${p.gaveras[index].quantity} - Peso ${p.gaveras[index].referenceWeight} g',
+                                style: textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: AppSpacing.xSmall),
+                        Row(
+                          children: [
+                            Icon(Icons.shopping_basket, size: 20),
+                            const SizedBox(width: AppSpacing.xSmall),
+                            Text(
+                              'Canastillas:',
+                              style: textTheme.headlineMedium,
+                            ),
+                            const SizedBox(width: AppSpacing.xSmall),
+                            Text('${p.basketsQuantity}'),
+                          ],
+                        ),
+                        SizedBox(height: AppSpacing.xSmall),
+
+                        SizedBox(height: AppSpacing.xSmall),
+                        Row(
+                          children: [
+                            Icon(Icons.phone, size: 20),
+                            const SizedBox(width: AppSpacing.xSmall),
+                            Text('Contacto:', style: textTheme.headlineMedium),
+                            const SizedBox(width: AppSpacing.xSmall),
+                            Text(p.phone),
+                          ],
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      if (user?.role == UserRole.admin) {
+                        _showAdminStageSelector(context, p.id);
+                      } else {
+                        final route = _routeForRole(user!.role);
+                        context.go('$route/${p.id}');
+                      }
+                    },
+                  ),
+                );
               },
             ),
-          );
-        },
-      ),
     );
   }
 

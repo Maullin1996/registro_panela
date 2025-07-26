@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:registro_panela/core/services/image_picker_service_provider.dart';
-import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data.dart';
+import 'package:registro_panela/features/stage1_delivery/domain/entities/stage1_form_data.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/app_form_text_fild.dart';
 import 'package:registro_panela/features/stage1_delivery/providers/stage1_form_provider.dart';
@@ -239,12 +239,19 @@ class _Stage1FormState extends ConsumerState<Stage1LoadForm> {
                   children: [
                     const SizedBox(height: AppSpacing.smallLarge),
                     Center(
-                      child: Image.file(
-                        File(_fotoPath!),
-                        width: 300,
-                        height: 300,
-                        fit: BoxFit.cover,
-                      ),
+                      child: _fotoPath!.startsWith('http')
+                          ? Image.network(
+                              _fotoPath!,
+                              width: 300,
+                              height: 300,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              File(_fotoPath!),
+                              width: 300,
+                              height: 300,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ],
                 ),

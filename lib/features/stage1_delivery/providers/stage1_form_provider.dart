@@ -1,5 +1,6 @@
-import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/core/storage/application/storage_providers.dart';
+import 'package:registro_panela/features/stage1_delivery/domain/entities/stage1_form_data.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/stage1_usecases_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'stage1_form_provider.g.dart';
@@ -13,14 +14,24 @@ class Stage1Form extends _$Stage1Form {
 
   Future<void> submit(Stage1FormData data, {required bool isNew}) async {
     state = state.copyWith(status: Stage1FormStatus.submitting);
+
     try {
-      await Future.delayed(const Duration(milliseconds: 300));
-      final repo = ref.read(stage1ProjectsProvider.notifier);
-      if (isNew) {
-        repo.add(data);
-      } else {
-        repo.update(data);
+      if (data.photoPath != null && data.photoPath!.isNotEmpty) {
+        final uploadImage = ref.read(uploadImageProvider);
+        final downloadUrl = await uploadImage(
+          path: 'stage1_photos/${data.id}.jpg',
+          localFilePath: data.photoPath!,
+        );
+        data = data.copyWith(photoPath: downloadUrl);
       }
+      if (isNew) {
+        final createUseCase = ref.read(createStage1DataProvider);
+        await createUseCase(data);
+      } else {
+        final updateUseCase = ref.read(updateStage1DataProvider);
+        await updateUseCase(data);
+      }
+
       state = state.copyWith(status: Stage1FormStatus.success);
     } catch (e) {
       state = state.copyWith(

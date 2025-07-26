@@ -6,6 +6,7 @@ import 'package:registro_panela/features/auth/domin/repositories/auth_repository
 
 class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final currentUser = FirebaseAuth.instance.currentUser;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override

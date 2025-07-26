@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/stage1_project_by_id_provider.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_provider.dart';
 import 'package:registro_panela/features/stage3_weigh/presentation/widget/stage3_load_form.dart';
 import 'package:registro_panela/features/stage3_weigh/providers/stage3_form_provider.dart';
@@ -21,9 +21,7 @@ class Stage3FormPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final project = ref
-        .watch(stage1ProjectsProvider)
-        .firstWhereOrNull((p) => p.id == projectId);
+    final project = ref.watch(stage1ProjectByIdProvider(projectId));
 
     if (project == null) {
       return const Scaffold(

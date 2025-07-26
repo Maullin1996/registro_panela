@@ -1,12 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/features/stage1_delivery/presentation/widgets/stage1_load_form.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_form_provider.dart';
-
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/index.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
 
 class Stage1Page extends ConsumerWidget {
@@ -30,10 +27,11 @@ class Stage1Page extends ConsumerWidget {
     });
 
     final isNew = projectId == 'new';
-    final projects = ref.watch(stage1ProjectsProvider);
     final project = isNew
         ? null
-        : projects.firstWhereOrNull((project) => project.id == projectId);
+        : ref
+              .watch(syncStage1ProjectsProvider)
+              .firstWhere((p) => p.id == projectId);
     return Scaffold(
       appBar: AppBar(
         title: Text(

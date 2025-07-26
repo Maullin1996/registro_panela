@@ -1,12 +1,10 @@
 import 'dart:io';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:registro_panela/core/services/image_picker_service_provider.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/stage1_project_by_id_provider.dart';
 import 'package:registro_panela/features/stage5_2_records/domain/stage52_record_data.dart';
 import 'package:registro_panela/features/stage5_2_records/providers/stage52_form_status.dart';
 import 'package:registro_panela/shared/utils/tokens.dart';
@@ -27,9 +25,7 @@ class _Stage52FormPageState extends ConsumerState<Stage52LoadForm> {
 
   @override
   Widget build(BuildContext context) {
-    final project = ref
-        .watch(stage1ProjectsProvider)
-        .firstWhereOrNull((p) => p.id == widget.projectId)!;
+    final project = ref.watch(stage1ProjectByIdProvider(widget.projectId))!;
     final formState = ref.watch(stage52FormProvider);
     final formNotifier = ref.read(stage52FormProvider.notifier);
     final textTheme = TextTheme.of(context);

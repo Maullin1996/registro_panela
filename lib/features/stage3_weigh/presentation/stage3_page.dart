@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:registro_panela/core/router/routes.dart';
-import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/features/stage1_delivery/domain/entities/stage1_form_data.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/stage1_project_by_id_provider.dart';
 import 'package:registro_panela/features/stage2_load/domain/stage2_load_data.dart';
 import 'package:registro_panela/features/stage2_load/providers/stage2_load_provider.dart';
 import 'package:registro_panela/features/stage3_weigh/domain/stage3_form_data.dart';
@@ -20,9 +20,7 @@ class Stage3Page extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final project = ref
-        .watch(stage1ProjectsProvider)
-        .firstWhereOrNull((p) => p.id == projectId);
+    final project = ref.watch(stage1ProjectByIdProvider(projectId));
     final loads2 = ref
         .watch(stage2LoadProvider)
         .where((l) => l.projectId == projectId)

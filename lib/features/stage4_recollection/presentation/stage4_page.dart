@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:registro_panela/core/router/routes.dart';
-import 'package:registro_panela/features/stage1_delivery/providers/stage1_projects_provider.dart';
+import 'package:registro_panela/features/stage1_delivery/providers/stage1_project_by_id_provider.dart';
 import 'package:registro_panela/features/stage4_recollection/domin/stage4_form_data.dart';
 import 'package:registro_panela/features/stage4_recollection/providers/stage4_form_provider.dart';
 import 'package:registro_panela/features/stage4_recollection/providers/stage4_load_provider.dart';
@@ -25,9 +25,7 @@ class Stage4Page extends ConsumerWidget {
 
     final formState = ref.watch(stage4FormProvider);
 
-    final project = ref
-        .watch(stage1ProjectsProvider)
-        .firstWhere((p) => p.id == projectId);
+    final project = ref.watch(stage1ProjectByIdProvider(projectId))!;
 
     final existing = ref
         .watch(stage4LoadProvider)

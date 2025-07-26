@@ -1,4 +1,4 @@
-import 'package:registro_panela/features/stage1_delivery/domain/stage1_form_data.dart';
+import 'package:registro_panela/features/stage1_delivery/domain/entities/stage1_form_data.dart';
 
 final mockStage1Projects = <Stage1FormData>[
   Stage1FormData(
