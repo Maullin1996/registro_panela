@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import 'package:registro_panela/features/molienda/presentation/providers/molienda_providers.dart';
@@ -30,6 +31,16 @@ class MobileLoteDetailPage extends ConsumerWidget {
       backgroundColor: AppColors.backgroundCrema,
       appBar: AppBar(
         title: Text('Detalle de lote', style: textTheme.headlineMedium),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
       ),
       body: stage1Async.when(
         loading: () => const Center(

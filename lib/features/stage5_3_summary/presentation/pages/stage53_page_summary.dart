@@ -1,16 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import 'package:registro_panela/features/stage5_2_records/presentation/providers/sync_stage52_loads_provider.dart';
 import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/widgets.dart';
 
-class Stage52SummaryPage extends ConsumerWidget {
+class Stage53PageSummary extends ConsumerWidget {
   final String projectId;
   final String recordId;
-  const Stage52SummaryPage({
+  const Stage53PageSummary({
     super.key,
     required this.projectId,
     required this.recordId,
@@ -33,6 +34,16 @@ class Stage52SummaryPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
         title: Text('Detalle del registro', style: textTheme.headlineMedium),
       ),
       body: SingleChildScrollView(
@@ -46,7 +57,7 @@ class Stage52SummaryPage extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (record.photoPath.isNotEmpty)
-              StageImageWidget(imageUrl: record.photoPath, fit: BoxFit.contain),
+              StageImageWidget(imageUrl: record.photoPath, fit: BoxFit.cover),
             const SizedBox(height: AppSpacing.smallLarge),
             CustomCard(
               child: Column(

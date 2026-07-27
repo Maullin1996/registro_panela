@@ -78,7 +78,16 @@ class _Stage3PageSummaryState extends ConsumerState<Stage3PageSummary> {
     return Scaffold(
       appBar: AppBar(
         title: Text('PESAJE', style: textTheme.headlineMedium),
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
       ),
       body: CustomScrollView(
         controller: _scrollController,

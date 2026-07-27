@@ -32,19 +32,19 @@ class StageImageWidget extends StatelessWidget {
     }
 
     if (imageUrl!.startsWith('http')) {
-      if (kIsWeb) {
-        return Image.network(
-          imageUrl!,
-          width: width,
-          height: height,
-          fit: fit,
-          loadingBuilder: (_, child, progress) {
-            if (progress == null) return child;
-            return _ImageShimmer(width: width ?? 100, height: height ?? 100);
-          },
-          errorBuilder: (_, _, _) => errorWidget,
-        );
-      }
+      // if (kIsWeb) {
+      //   return Image.network(
+      //     imageUrl!,
+      //     width: width,
+      //     height: height,
+      //     fit: fit,
+      //     loadingBuilder: (_, child, progress) {
+      //       if (progress == null) return child;
+      //       return _ImageShimmer(width: width ?? 100, height: height ?? 100);
+      //     },
+      //     errorBuilder: (_, _, _) => errorWidget,
+      //   );
+      // }
 
       return ClipRRect(
         borderRadius: BorderRadiusGeometry.circular(AppRadius.large),
@@ -139,7 +139,6 @@ class _ImageError extends StatelessWidget {
       ),
       child: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.broken_image_outlined, color: AppColors.error, size: 28),
             const SizedBox(height: 4),

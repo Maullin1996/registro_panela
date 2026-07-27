@@ -14,6 +14,7 @@ import 'package:registro_panela/features/stage5_1_missing_weight/presentation/pr
 import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/custom_card.dart';
 import 'package:registro_panela/features/stage3_weigh/domain/entities/basket_quality.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 
 class Stage5InvoiceSummaryPage extends ConsumerWidget {
   final Stage5InvoiceData invoice;
@@ -45,7 +46,16 @@ class Stage5InvoiceSummaryPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
         title: Text('FACTURA', style: textTheme.headlineMedium),
         actions: [
           IconButton(

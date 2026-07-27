@@ -70,6 +70,16 @@ class _MobileEntregaDetailPageState
       backgroundColor: AppColors.backgroundCrema,
       appBar: AppBar(
         title: Text('Detalle de entrega', style: textTheme.headlineMedium),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
       ),
       body: entregasAsync.when(
         loading: () => const Center(

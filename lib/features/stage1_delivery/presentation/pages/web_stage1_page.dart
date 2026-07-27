@@ -4,10 +4,12 @@ import 'package:go_router/go_router.dart';
 
 import 'package:registro_panela/core/services/custom_snack_bar.dart';
 import 'package:registro_panela/core/theme/utils/colors.dart';
+import 'package:registro_panela/core/theme/utils/radius.dart';
 import 'package:registro_panela/core/theme/utils/spacing.dart';
 import 'package:registro_panela/features/shared/web_layout.dart';
 import 'package:registro_panela/features/stage1_delivery/presentation/pages/stage1_load_form.dart';
 import 'package:registro_panela/features/stage1_delivery/presentation/providers/index.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 
 class WebStage1Page extends ConsumerWidget {
   final String projectId;
@@ -52,23 +54,39 @@ class WebStage1Page extends ConsumerWidget {
         children: [
           // ── Header ────────────────────────────────────────────
           Container(
+            margin: const EdgeInsets.fromLTRB(
+              AppSpacing.small,
+              AppSpacing.small,
+              AppSpacing.small,
+              0,
+            ),
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.medium,
               vertical: AppSpacing.small,
             ),
             decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              border: Border(
-                bottom: BorderSide(
-                  color: AppColors.secondaryDarkPanela.withAlpha(30),
+              color: AppColors.secondaryDarkPanela,
+              borderRadius: BorderRadius.circular(AppRadius.extraLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textDark.withAlpha(20),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
                 ),
-              ),
+              ],
             ),
             child: Row(
               children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_rounded),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: IconDecoration(
+                      icon: Icons.arrow_back_ios_new,
+                      iconColor: AppColors.accentLightPanela,
+                      backgroundColor: AppColors.backgroundCrema,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: AppSpacing.xSmall),
                 Text(
@@ -76,7 +94,7 @@ class WebStage1Page extends ConsumerWidget {
                       ? 'Nuevo proyecto'.toUpperCase()
                       : 'Modificar ${project!.name}'.toUpperCase(),
                   style: textTheme.headlineMedium?.copyWith(
-                    color: AppColors.primaryPanelaBrown,
+                    color: AppColors.textLight,
                   ),
                 ),
               ],

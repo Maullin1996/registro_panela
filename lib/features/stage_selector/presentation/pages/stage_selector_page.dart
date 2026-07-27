@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/core/router/routes.dart';
+import 'package:registro_panela/shared/widgets/widgets.dart';
 
 class StageSelectorPage extends StatelessWidget {
   final String projectId;
@@ -13,7 +14,16 @@ class StageSelectorPage extends StatelessWidget {
     final textTheme = TextTheme.of(context);
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
         title: Text('Seleccionar Etapa', style: textTheme.headlineLarge),
       ),
       body: SafeArea(

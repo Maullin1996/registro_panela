@@ -196,7 +196,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                   final projectId = state.pathParameters['projectId']!;
                   return slideUpPage(
                     AdaptiveLayout(
-                      mobile: Stage52FormPage(projectId: projectId),
+                      mobile: Stage53FormPage(projectId: projectId),
                       web: WebStage53FormPage(projectId: projectId),
                     ),
                     state,
@@ -211,7 +211,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                   final id = state.pathParameters['id'];
                   return slideUpPage(
                     AdaptiveLayout(
-                      mobile: Stage52FormPage(projectId: projectId, id: id),
+                      mobile: Stage53FormPage(projectId: projectId, id: id),
                       web: WebStage53FormPage(projectId: projectId, id: id),
                     ),
                     state,
@@ -226,7 +226,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                   final recordId = state.pathParameters['recordId']!;
                   return slideUpPage(
                     AdaptiveLayout(
-                      mobile: Stage52SummaryPage(
+                      mobile: Stage53PageSummary(
                         projectId: recordId,
                         recordId: recordId,
                       ),
@@ -273,8 +273,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         name: 'adminResetPassword',
         path: '/admin/reset-password',
-        pageBuilder: (_, state) =>
-            slideUpPage(const AdminResetPasswordPage(), state),
+        pageBuilder: (_, state) => slideUpPage(
+          const AdaptiveLayout(
+            mobile: MobileAdministrativePage(),
+            web: WebAdministrativePage(),
+          ),
+          state,
+        ),
       ),
       GoRoute(
         path: Routes.imageViewer,

@@ -86,24 +86,33 @@ class _WebProjectSelectorPageState
         children: [
           // ── Header ────────────────────────────────────────────
           Container(
+            margin: const EdgeInsets.fromLTRB(
+              AppSpacing.small,
+              AppSpacing.small,
+              AppSpacing.small,
+              0,
+            ),
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.medium,
               vertical: AppSpacing.small,
             ),
             decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              border: Border(
-                bottom: BorderSide(
-                  color: AppColors.secondaryDarkPanela.withAlpha(30),
+              color: AppColors.secondaryDarkPanela,
+              borderRadius: BorderRadius.circular(AppRadius.extraLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textDark.withAlpha(20),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
                 ),
-              ),
+              ],
             ),
             child: Row(
               children: [
                 Text(
                   'Proyectos'.toUpperCase(),
                   style: textTheme.headlineMedium?.copyWith(
-                    color: AppColors.primaryPanelaBrown,
+                    color: AppColors.textLight,
                   ),
                 ),
                 const Spacer(),
@@ -150,7 +159,7 @@ class _WebProjectSelectorPageState
                     borderRadius: BorderRadius.circular(AppRadius.medium),
                   ),
                   color: AppColors.cardBackground,
-                  icon: const Icon(Icons.more_vert),
+                  icon: Icon(Icons.more_vert, color: AppColors.backgroundCrema),
                   onSelected: (value) async {
                     switch (value) {
                       case 'users':

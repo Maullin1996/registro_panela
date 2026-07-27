@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 
 import 'package:registro_panela/features/stage1_delivery/domain/entities/stage1_form_data.dart';
 import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/features/pdf/helpers/generate_and_share_pdf.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 
 class PdfScreen extends StatefulWidget {
   const PdfScreen({super.key, required this.project});
@@ -39,9 +41,15 @@ class _PdfScreenState extends State<PdfScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.backgroundCrema,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.textDark),
-          onPressed: () => Navigator.of(context).pop(),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
         ),
         title: Text(
           'Vista previa del PDF',

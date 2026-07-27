@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import 'package:registro_panela/core/router/routes.dart';
 import 'package:registro_panela/features/auth/domain/enums/user_role.dart';
 import 'package:registro_panela/features/auth/presentation/providers/auth_provider.dart';
 import 'package:registro_panela/features/molienda/domain/entities/molienda.dart';
@@ -10,8 +11,12 @@ import 'package:registro_panela/features/molienda/presentation/providers/moliend
 import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/widgets.dart';
 import 'package:registro_panela/core/services/custom_snack_bar.dart';
+import '../../../shared/web_layout.dart';
 import 'molienda_entregas_list.dart';
 import 'molienda_form_dialog.dart';
+
+final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+const Color _dividerColor = Color(0x2D7B4E1A);
 
 class WebMoliendaPage extends ConsumerWidget {
   const WebMoliendaPage({super.key});
@@ -38,78 +43,114 @@ class WebMoliendaPage extends ConsumerWidget {
     final isAdmin = ref.watch(authProvider).user?.role == UserRole.admin;
     final textTheme = TextTheme.of(context);
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundCrema,
-      appBar: AppBar(
-        leading: BackButton(onPressed: () => context.pop()),
-        title: Text('Moliendas', style: textTheme.headlineMedium),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: AppSpacing.medium),
-            child: ElevatedButton.icon(
-              onPressed: () => _showFormDialog(context, ref),
-              icon: const Icon(
-                Icons.add,
-                color: AppColors.cardBackground,
-                size: 18,
-              ),
-              label: Text(
-                'Agregar',
-                style: textTheme.bodyMedium?.copyWith(
-                  color: AppColors.cardBackground,
-                  fontWeight: FontWeight.w600,
+    return WebLayout(
+      selectedIndex: 3,
+      onDestinationSelected: (index) {
+        if (index == 0) context.go(Routes.projects);
+        if (index == 1) context.push(Routes.inventory);
+        if (index == 2) context.pushNamed('adminResetPassword');
+      },
+      child: Column(
+        children: [
+          // ── Header ────────────────────────────────────────────
+          Container(
+            margin: const EdgeInsets.fromLTRB(
+              AppSpacing.small,
+              AppSpacing.small,
+              AppSpacing.small,
+              0,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.medium,
+              vertical: AppSpacing.small,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.secondaryDarkPanela,
+              borderRadius: BorderRadius.circular(AppRadius.extraLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textDark.withAlpha(20),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.store_outlined,
+                  color: AppColors.accentLightPanela,
+                ),
+                const SizedBox(width: AppSpacing.xSmall),
+                Text(
+                  'Moliendas'.toUpperCase(),
+                  style: textTheme.headlineMedium?.copyWith(
+                    color: AppColors.textLight,
+                  ),
+                ),
+                const Spacer(),
+                ElevatedButton.icon(
+                  onPressed: () => _showFormDialog(context, ref),
+                  icon: const Icon(
+                    Icons.add,
+                    color: AppColors.cardBackground,
+                    size: 18,
+                  ),
+                  label: Text(
+                    'Agregar',
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: AppColors.cardBackground,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ── Contenido ─────────────────────────────────────────
+          Expanded(
+            child: itemsAsync.when(
+              loading: () => const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryPanelaBrown,
                 ),
               ),
+              error: (e, _) => ErrorWidgetCustom(error: e.toString()),
+              data: (moliendas) => moliendas.isEmpty
+                  ? const Padding(
+                      padding: EdgeInsets.all(AppSpacing.medium),
+                      child: EmptyWidget(
+                        message: 'Todavía no has creado ninguna molienda.',
+                      ),
+                    )
+                  : GridView.builder(
+                      padding: const EdgeInsets.all(AppSpacing.medium),
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 380,
+                            mainAxisSpacing: AppSpacing.medium,
+                            crossAxisSpacing: AppSpacing.medium,
+                            mainAxisExtent: 200,
+                          ),
+                      itemCount: moliendas.length,
+                      itemBuilder: (_, index) {
+                        final m = moliendas[index];
+                        return _MoliendaCard(
+                          key: ValueKey(m.id),
+                          molienda: m,
+                          onVerEntregas: () => _showEntregasDialog(context, m),
+                          onEdit: () =>
+                              _showFormDialog(context, ref, molienda: m),
+                          onDelete: isAdmin
+                              ? () => _confirmDelete(context, ref, m.id)
+                              : null,
+                        );
+                      },
+                    ),
             ),
           ),
         ],
-      ),
-      body: itemsAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primaryPanelaBrown),
-        ),
-        error: (e, _) => ErrorWidgetCustom(error: e.toString()),
-        data: (moliendas) => moliendas.isEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(AppSpacing.medium),
-                child: EmptyWidget(
-                  message: 'Todavía no has creado ninguna molienda.',
-                ),
-              )
-            : SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSpacing.medium),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final w = constraints.maxWidth;
-                    final cols = w < 600
-                        ? 1
-                        : w < 1000
-                        ? 2
-                        : 3;
-                    final cardWidth =
-                        (w - AppSpacing.xSmall * (cols - 1)) / cols;
-                    return Wrap(
-                      spacing: AppSpacing.medium,
-                      runSpacing: AppSpacing.medium,
-                      children: moliendas.map((m) {
-                        return SizedBox(
-                          width: cardWidth,
-                          child: _MoliendaCard(
-                            molienda: m,
-                            onVerEntregas: () =>
-                                _showEntregasDialog(context, m),
-                            onEdit: () =>
-                                _showFormDialog(context, ref, molienda: m),
-                            onDelete: isAdmin
-                                ? () => _confirmDelete(context, ref, m.id)
-                                : null,
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
-              ),
       ),
     );
   }
@@ -238,6 +279,7 @@ class _MoliendaCard extends StatelessWidget {
   final VoidCallback? onDelete;
 
   const _MoliendaCard({
+    super.key,
     required this.molienda,
     required this.onVerEntregas,
     required this.onEdit,
@@ -259,7 +301,7 @@ class _MoliendaCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                IconDecoration(
+                const IconDecoration(
                   icon: Icons.storefront_outlined,
                   iconColor: AppColors.primaryPanelaBrown,
                 ),
@@ -308,10 +350,10 @@ class _MoliendaCard extends StatelessWidget {
               horizontal: AppSpacing.small,
               vertical: AppSpacing.xSmall,
             ),
-            child: Divider(
+            child: const Divider(
               height: 1,
               thickness: 1,
-              color: AppColors.secondaryDarkPanela.withAlpha(45),
+              color: _dividerColor,
             ),
           ),
           Padding(
@@ -333,9 +375,7 @@ class _MoliendaCard extends StatelessWidget {
                   icon: Icons.calendar_month,
                   iconColor: AppColors.secondaryDarkPanela,
                   firstText: 'Creada: ',
-                  secondText: DateFormat(
-                    'dd/MM/yyyy',
-                  ).format(molienda.creadoEn),
+                  secondText: _dateFormat.format(molienda.creadoEn),
                 ),
               ],
             ),

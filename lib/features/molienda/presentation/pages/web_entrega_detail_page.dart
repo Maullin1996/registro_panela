@@ -13,6 +13,8 @@ import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/widgets.dart';
 import 'package:registro_panela/features/molienda/presentation/helpers/qr_share.dart';
 
+final DateFormat _entregaDateFormat = DateFormat('dd/MM/yyyy HH:mm');
+
 class WebEntregaDetailPage extends ConsumerStatefulWidget {
   final String moliendaId;
   final String entregaId;
@@ -67,113 +69,166 @@ class _WebEntregaDetailPageState extends ConsumerState<WebEntregaDetailPage> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundCrema,
-      appBar: AppBar(
-        title: Text('Detalle de entrega', style: textTheme.headlineMedium),
-      ),
-      body: entregasAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primaryPanelaBrown),
-        ),
-        error: (e, _) => ErrorWidgetCustom(error: e.toString()),
-        data: (entregas) {
-          final entrega = entregas.firstWhereOrNull(
-            (e) => e.id == widget.entregaId,
-          );
-          if (entrega == null) {
-            return Center(
-              child: Text(
-                'Entrega no encontrada',
-                style: textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textDark.withAlpha(120),
+      body: Column(
+        children: [
+          // ── Header ────────────────────────────────────────────
+          Container(
+            margin: const EdgeInsets.fromLTRB(
+              AppSpacing.small,
+              AppSpacing.small,
+              AppSpacing.small,
+              0,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.medium,
+              vertical: AppSpacing.small,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.secondaryDarkPanela,
+              borderRadius: BorderRadius.circular(AppRadius.extraLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textDark.withAlpha(20),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
                 ),
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.medium),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 420),
-                child: CustomCard(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.medium),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        RepaintBoundary(
-                          key: _qrBoundaryKey,
-                          child: QrImageView(
-                            data: entrega.qrToken,
-                            size: 220,
-                            backgroundColor: AppColors.cardBackground,
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.medium),
-                        Text(
-                          'Fecha de entrega',
-                          style: textTheme.bodySmall?.copyWith(
-                            color: AppColors.textDark.withAlpha(150),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          DateFormat(
-                            'dd/MM/yyyy HH:mm',
-                          ).format(entrega.fechaEntrega),
-                          style: textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: AppSpacing.medium),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: () => _shareQr(moliendaNombre),
-                            icon: const Icon(
-                              Icons.share_outlined,
-                              color: AppColors.textLight,
-                              size: 18,
-                            ),
-                            label: Text(
-                              'Compartir QR',
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: AppColors.textLight,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.small),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            onPressed: () => context.pushNamed(
-                              'loteDetail',
-                              pathParameters: {
-                                'produccionId': entrega.produccionId,
-                              },
-                            ),
-                            icon: const Icon(
-                              Icons.visibility_outlined,
-                              color: AppColors.cardBackground,
-                              size: 18,
-                            ),
-                            label: Text(
-                              'Ver lote',
-                              style: textTheme.bodyMedium?.copyWith(
-                                color: AppColors.cardBackground,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+              ],
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: IconDecoration(
+                      icon: Icons.arrow_back_ios_new,
+                      iconColor: AppColors.accentLightPanela,
+                      backgroundColor: AppColors.backgroundCrema,
                     ),
                   ),
                 ),
-              ),
+                const SizedBox(width: AppSpacing.xSmall),
+                Text(
+                  'Detalle de entrega'.toUpperCase(),
+                  style: textTheme.headlineMedium?.copyWith(
+                    color: AppColors.textLight,
+                  ),
+                ),
+              ],
             ),
-          );
-        },
+          ),
+
+          // ── Contenido ─────────────────────────────────────────
+          Expanded(
+            child: entregasAsync.when(
+              loading: () => const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryPanelaBrown,
+                ),
+              ),
+              error: (e, _) => ErrorWidgetCustom(error: e.toString()),
+              data: (entregas) {
+                final entrega = entregas.firstWhereOrNull(
+                  (e) => e.id == widget.entregaId,
+                );
+                if (entrega == null) {
+                  return Center(
+                    child: Text(
+                      'Entrega no encontrada',
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textDark.withAlpha(120),
+                      ),
+                    ),
+                  );
+                }
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(AppSpacing.medium),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 420),
+                      child: CustomCard(
+                        child: Padding(
+                          padding: const EdgeInsets.all(AppSpacing.medium),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              RepaintBoundary(
+                                key: _qrBoundaryKey,
+                                child: QrImageView(
+                                  data: entrega.qrToken,
+                                  size: 220,
+                                  backgroundColor: AppColors.cardBackground,
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.medium),
+                              Text(
+                                'Fecha de entrega',
+                                style: textTheme.bodySmall?.copyWith(
+                                  color: AppColors.textDark.withAlpha(150),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                _entregaDateFormat.format(
+                                  entrega.fechaEntrega,
+                                ),
+                                style: textTheme.bodyLarge,
+                              ),
+                              const SizedBox(height: AppSpacing.medium),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  onPressed: () => _shareQr(moliendaNombre),
+                                  icon: const Icon(
+                                    Icons.share_outlined,
+                                    color: AppColors.textLight,
+                                    size: 18,
+                                  ),
+                                  label: Text(
+                                    'Compartir QR',
+                                    style: textTheme.bodyMedium?.copyWith(
+                                      color: AppColors.textLight,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.small),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton.icon(
+                                  onPressed: () => context.pushNamed(
+                                    'loteDetail',
+                                    pathParameters: {
+                                      'produccionId': entrega.produccionId,
+                                    },
+                                  ),
+                                  icon: const Icon(
+                                    Icons.visibility_outlined,
+                                    color: AppColors.cardBackground,
+                                    size: 18,
+                                  ),
+                                  label: Text(
+                                    'Ver lote',
+                                    style: textTheme.bodyMedium?.copyWith(
+                                      color: AppColors.cardBackground,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

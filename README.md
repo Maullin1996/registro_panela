@@ -253,16 +253,17 @@ firebase deploy --only hosting
 
 ## Pantallas principales
 
-_(Pendiente: agregar capturas de pantalla de las pantallas principales — login, selector de proyectos, stages 1 a 5, inventario y moliendas — en `assets/images/` y enlazarlas aquí.)_
+_Clic en una captura para verla a tamaño completo._
 
-- **Login** — autenticación con Firebase Auth.
-- **Selector de proyectos** — listado de lotes/proyectos en curso.
-- **Selector de etapa** — navegación entre stages 1-5 de un proyecto.
-- **Stage 1 — Entrega** — formulario de gaveras, canastillas, preservativos y cal; selección de molienda.
-- **Stage 2 — Cargue** — registro del cargue de canastillas.
-- **Stage 3 — Pesaje** — pesaje individual por canastilla con foto.
-- **Stage 4 — Recolección** — devolución de gaveras/canastillas y preservativos.
-- **Stage 5 — Liquidación** — registros, resumen y factura final.
-- **Inventario** — disponibilidad de gaveras y canastillas.
-- **Moliendas** — catálogo de moliendas, entregas y su QR de trazabilidad.
-- **Administración** — gestión de usuarios y roles (solo `admin`).
+| Pantalla | Captura |
+|---|---|
+| **Login** — autenticación con Firebase Auth. | <a href="assets/images/login.PNG"><img src="assets/images/login.PNG" width="160" alt="Login"></a> |
+| **Selector de proyectos** — listado de lotes/proyectos en curso. | <a href="assets/images/Selector_de_proyectos.PNG"><img src="assets/images/Selector_de_proyectos.PNG" width="160" alt="Selector de proyectos"></a> |
+| **Stage 1 — Entrega** — formulario de gaveras, canastillas, preservativos y cal; selección de molienda. | <a href="assets/images/Stage_1_Entrega.PNG"><img src="assets/images/Stage_1_Entrega.PNG" width="160" alt="Stage 1 - Entrega"></a> |
+| **Stage 2 — Cargue** — registro del cargue de canastillas. | <a href="assets/images/Stage_2_Cargue.PNG"><img src="assets/images/Stage_2_Cargue.PNG" width="160" alt="Stage 2 - Cargue"></a> |
+| **Stage 3 — Pesaje** — pesaje individual por canastilla con foto. | <a href="assets/images/Stage_3_Pesaje.PNG"><img src="assets/images/Stage_3_Pesaje.PNG" width="160" alt="Stage 3 - Pesaje"></a> |
+| **Stage 4 — Recolección** — devolución de gaveras/canastillas y preservativos. | <a href="assets/images/Stage_4_Recoleccion.PNG"><img src="assets/images/Stage_4_Recoleccion.PNG" width="160" alt="Stage 4 - Recolección"></a> |
+| **Stage 5 — Liquidación** — registros, resumen y factura final. | <a href="assets/images/Stage_5_cargues.PNG"><img src="assets/images/Stage_5_cargues.PNG" width="160" alt="Stage 5 - Cargues"></a> <a href="assets/images/Stage_5_resumen.PNG"><img src="assets/images/Stage_5_resumen.PNG" width="160" alt="Stage 5 - Resumen"></a> <a href="assets/images/Stage_5_Liquidacion.PNG"><img src="assets/images/Stage_5_Liquidacion.PNG" width="160" alt="Stage 5 - Liquidación"></a> |
+| **Inventario** — disponibilidad de gaveras y canastillas. | <a href="assets/images/Inventario.PNG"><img src="assets/images/Inventario.PNG" width="160" alt="Inventario"></a> |
+| **Moliendas** — catálogo de moliendas, entregas y su QR de trazabilidad. | <a href="assets/images/Moliendas.PNG"><img src="assets/images/Moliendas.PNG" width="160" alt="Moliendas"></a> |
+| **Administración** — gestión de usuarios y roles (solo `admin`). | <a href="assets/images/Administracion.PNG"><img src="assets/images/Administracion.PNG" width="160" alt="Administración"></a> |

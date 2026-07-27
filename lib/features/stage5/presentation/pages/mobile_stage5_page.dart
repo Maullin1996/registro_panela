@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:registro_panela/features/stage1_delivery/presentation/providers/stage1_project_by_id_provider.dart';
 import 'package:registro_panela/core/theme/utils/tokens.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 import '../../../stage5_3_summary/presentation/pages/mobile_stage53_page.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/presentation/pages/stage5_summary.dart';
 import 'package:registro_panela/features/stage5_2_records/presentation/pages/stage52_missing_weight.dart';
@@ -41,7 +42,16 @@ class _Stage5PageState extends ConsumerState<Stage5Page> {
           project.name.toUpperCase(),
           style: textTheme.headlineMedium,
         ),
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
       ),
       body: screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

@@ -37,29 +37,45 @@ class WebStage53SummaryPage extends ConsumerWidget {
         children: [
           // ── Header ────────────────────────────────────────────
           Container(
+            margin: const EdgeInsets.fromLTRB(
+              AppSpacing.small,
+              AppSpacing.small,
+              AppSpacing.small,
+              0,
+            ),
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.medium,
               vertical: AppSpacing.small,
             ),
             decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              border: Border(
-                bottom: BorderSide(
-                  color: AppColors.secondaryDarkPanela.withAlpha(30),
+              color: AppColors.secondaryDarkPanela,
+              borderRadius: BorderRadius.circular(AppRadius.extraLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textDark.withAlpha(20),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
                 ),
-              ),
+              ],
             ),
             child: Row(
               children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_rounded),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: IconDecoration(
+                      icon: Icons.arrow_back_ios_new,
+                      iconColor: AppColors.accentLightPanela,
+                      backgroundColor: AppColors.backgroundCrema,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: AppSpacing.xSmall),
                 Text(
                   'Detalle del registro'.toUpperCase(),
                   style: textTheme.headlineMedium?.copyWith(
-                    color: AppColors.primaryPanelaBrown,
+                    color: AppColors.textLight,
                   ),
                 ),
               ],
@@ -83,7 +99,7 @@ class WebStage53SummaryPage extends ConsumerWidget {
                             imageUrl: record.photoPath,
                             width: double.infinity,
                             height: 600,
-                            fit: BoxFit.fitHeight,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       const SizedBox(height: AppSpacing.medium),

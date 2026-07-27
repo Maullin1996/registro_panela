@@ -1,8 +1,9 @@
-export 'package:registro_panela/features/stage5_2_records/presentation/pages/stage52_form_page.dart';
+export 'package:registro_panela/features/stage5_3_summary/presentation/pages/stage53_form_page.dart';
 
 export 'package:registro_panela/features/stage3_weigh/presentation/pages/mobile_stage3_form_page.dart';
 
-export 'package:registro_panela/features/admin/presentation/pages/administrative_page.dart';
+export 'package:registro_panela/features/admin/presentation/pages/mobile_administrative_page.dart';
+export 'package:registro_panela/features/admin/presentation/pages/web_administrative_page.dart';
 export 'package:registro_panela/features/auth/presentation/pages/login_page.dart';
 export 'package:registro_panela/features/auth/presentation/providers/providers.dart';
 export 'package:registro_panela/features/inventory/presentation/pages/mobile_inventory_page.dart';
@@ -38,7 +39,7 @@ export 'package:registro_panela/features/stage5/presentation/pages/web_stage5_pa
 export 'package:registro_panela/features/stage5_1_missing_weight/presentation/pages/stage5_invoice_summary_page.dart';
 export 'package:registro_panela/features/stage5_1_missing_weight/presentation/pages/stage5_summary.dart';
 export 'package:registro_panela/features/stage5_1_missing_weight/presentation/pages/web_stage5_summary.dart';
-export 'package:registro_panela/features/stage5_2_records/presentation/pages/stage52_page_summary.dart';
+export 'package:registro_panela/features/stage5_3_summary/presentation/pages/stage53_page_summary.dart';
 export 'package:registro_panela/features/stage5_2_records/presentation/pages/stage52_missing_weight.dart';
 export 'package:registro_panela/features/stage5_2_records/presentation/pages/web_stage52_missing_weight.dart';
 export 'package:registro_panela/features/stage5_3_summary/presentation/pages/mobile_stage53_page.dart';

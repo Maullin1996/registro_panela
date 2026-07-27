@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:registro_panela/core/theme/utils/colors.dart';
 import 'package:registro_panela/features/stage1_delivery/presentation/pages/stage1_load_form.dart';
 
 import 'package:registro_panela/features/stage1_delivery/presentation/providers/index.dart';
 import 'package:registro_panela/core/services/custom_snack_bar.dart';
 import 'package:registro_panela/core/theme/utils/spacing.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 
 class Stage1Page extends ConsumerWidget {
   final String projectId;
@@ -51,9 +53,15 @@ class Stage1Page extends ConsumerWidget {
                 : 'Modificar ${project.name}'.toUpperCase(),
             style: textTheme.headlineMedium,
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_rounded),
-            onPressed: () => context.pop(),
+          leading: Padding(
+            padding: const EdgeInsets.all(12),
+            child: GestureDetector(
+              onTap: () => context.pop(),
+              child: IconDecoration(
+                icon: Icons.arrow_back_ios_new,
+                iconColor: AppColors.secondaryDarkPanela,
+              ),
+            ),
           ),
         ),
         body: SingleChildScrollView(

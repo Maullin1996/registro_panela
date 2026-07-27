@@ -6,6 +6,7 @@ import 'package:registro_panela/features/stage1_delivery/presentation/providers/
 import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/features/stage5_1_missing_weight/presentation/pages/web_stage5_summary.dart';
 import 'package:registro_panela/features/stage5_2_records/presentation/pages/web_stage52_missing_weight.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 import '../../../shared/web_layout.dart';
 import '../../../stage5_3_summary/presentation/pages/web_stage53_page.dart';
 
@@ -49,39 +50,72 @@ class _WebStage5PageState extends ConsumerState<WebStage5Page>
         children: [
           // ── Header ────────────────────────────────────────────
           Container(
+            margin: const EdgeInsets.fromLTRB(
+              AppSpacing.small,
+              AppSpacing.small,
+              AppSpacing.small,
+              0,
+            ),
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.medium,
               vertical: AppSpacing.small,
             ),
             decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              border: Border(
-                bottom: BorderSide(
-                  color: AppColors.secondaryDarkPanela.withAlpha(30),
+              color: AppColors.secondaryDarkPanela,
+              borderRadius: BorderRadius.circular(AppRadius.extraLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textDark.withAlpha(20),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
                 ),
-              ),
+              ],
             ),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_rounded),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => context.pop(),
+                      child: IconDecoration(
+                        icon: Icons.arrow_back_ios_new,
+                        iconColor: AppColors.accentLightPanela,
+                        backgroundColor: AppColors.backgroundCrema,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.small),
+                    Expanded(
+                      child: Text(
+                        project.name.toUpperCase(),
+                        style: textTheme.headlineMedium?.copyWith(
+                          color: AppColors.textLight,
+                          letterSpacing: 0.3,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: AppSpacing.xSmall),
-                Text(
-                  project.name.toUpperCase(),
-                  style: textTheme.headlineMedium?.copyWith(
-                    color: AppColors.primaryPanelaBrown,
-                  ),
-                ),
-                const Spacer(),
+                const SizedBox(height: AppSpacing.small),
                 TabBar(
                   controller: _tabController,
-                  isScrollable: true,
-                  tabAlignment: TabAlignment.start,
-                  indicatorColor: AppColors.primaryPanelaBrown,
-                  labelColor: AppColors.primaryPanelaBrown,
-                  unselectedLabelColor: AppColors.textDark.withAlpha(150),
+                  isScrollable: false,
+                  dividerColor: Colors.transparent,
+                  indicator: BoxDecoration(
+                    color: AppColors.accentLightPanela.withAlpha(45),
+                    borderRadius: BorderRadius.circular(AppRadius.large),
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelColor: AppColors.accentLightPanela,
+                  unselectedLabelColor: AppColors.textLight.withAlpha(150),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: AppTypography.h5,
+                  ),
+                  unselectedLabelStyle: const TextStyle(
+                    fontSize: AppTypography.h5,
+                  ),
                   tabs: const [
                     Tab(icon: Icon(Icons.summarize), text: 'Resumen'),
                     Tab(icon: Icon(Icons.report), text: 'Reporte'),

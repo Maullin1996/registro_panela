@@ -10,6 +10,7 @@ import 'package:registro_panela/features/stage3_weigh/presentation/providers/sta
 import 'package:registro_panela/features/stage3_weigh/presentation/providers/sync_stage3_loads_provider.dart';
 import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/features/stage3_weigh/presentation/pages/stage3_load_form.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 
 class Stage3FormPage extends ConsumerWidget {
   final String projectId;
@@ -78,7 +79,16 @@ class Stage3FormPage extends ConsumerWidget {
                 : 'Editar pesaje'.toUpperCase(),
             style: textTheme.headlineMedium,
           ),
-          leading: BackButton(onPressed: () => context.pop()),
+          leading: Padding(
+            padding: const EdgeInsets.all(12),
+            child: GestureDetector(
+              onTap: () => context.pop(),
+              child: IconDecoration(
+                icon: Icons.arrow_back_ios_new,
+                iconColor: AppColors.secondaryDarkPanela,
+              ),
+            ),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.only(

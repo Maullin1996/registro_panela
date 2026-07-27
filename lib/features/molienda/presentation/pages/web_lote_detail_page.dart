@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import 'package:registro_panela/features/molienda/presentation/providers/molienda_providers.dart';
@@ -15,6 +16,10 @@ import 'package:registro_panela/features/stage3_weigh/presentation/providers/syn
 import 'package:registro_panela/core/theme/utils/tokens.dart';
 import 'package:registro_panela/shared/widgets/widgets.dart';
 
+final DateFormat _entregaDateFormat = DateFormat('dd/MM/yyyy HH:mm');
+final DateFormat _pesajeDateFormat = DateFormat.yMd();
+const Color _dividerColor = Color(0x2D7B4E1A);
+
 class WebLoteDetailPage extends ConsumerWidget {
   final String produccionId;
   const WebLoteDetailPage({required this.produccionId, super.key});
@@ -28,27 +33,80 @@ class WebLoteDetailPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundCrema,
-      appBar: AppBar(
-        title: Text('Detalle de lote', style: textTheme.headlineMedium),
-      ),
-      body: stage1Async.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primaryPanelaBrown),
-        ),
-        error: (e, _) => ErrorWidgetCustom(error: e.toString()),
-        data: (data) {
-          if (data == null) {
-            return Center(
-              child: Text(
-                'Lote no encontrado',
-                style: textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textDark.withAlpha(120),
+      body: Column(
+        children: [
+          // ── Header ────────────────────────────────────────────
+          Container(
+            margin: const EdgeInsets.fromLTRB(
+              AppSpacing.small,
+              AppSpacing.small,
+              AppSpacing.small,
+              0,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.medium,
+              vertical: AppSpacing.small,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.secondaryDarkPanela,
+              borderRadius: BorderRadius.circular(AppRadius.extraLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textDark.withAlpha(20),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: IconDecoration(
+                      icon: Icons.arrow_back_ios_new,
+                      iconColor: AppColors.accentLightPanela,
+                      backgroundColor: AppColors.backgroundCrema,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.xSmall),
+                Text(
+                  'Detalle de lote'.toUpperCase(),
+                  style: textTheme.headlineMedium?.copyWith(
+                    color: AppColors.textLight,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ── Contenido ─────────────────────────────────────────
+          Expanded(
+            child: stage1Async.when(
+              loading: () => const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryPanelaBrown,
                 ),
               ),
-            );
-          }
-          return _LoteDetailBody(data: data, textTheme: textTheme);
-        },
+              error: (e, _) => ErrorWidgetCustom(error: e.toString()),
+              data: (data) {
+                if (data == null) {
+                  return Center(
+                    child: Text(
+                      'Lote no encontrado',
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textDark.withAlpha(120),
+                      ),
+                    ),
+                  );
+                }
+                return _LoteDetailBody(data: data, textTheme: textTheme);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -97,7 +155,7 @@ class _LoteDetailBody extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          IconDecoration(
+                          const IconDecoration(
                             icon: Icons.note_alt_outlined,
                             iconColor: AppColors.register,
                             backgroundColor: AppColors.register,
@@ -114,16 +172,12 @@ class _LoteDetailBody extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
                           horizontal: AppSpacing.small,
                           vertical: AppSpacing.xSmall,
                         ),
-                        child: Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: AppColors.secondaryDarkPanela.withAlpha(45),
-                        ),
+                        child: Divider(height: 1, thickness: 1, color: _dividerColor),
                       ),
                       CustomRichText(
                         icon: Icons.factory_outlined,
@@ -136,9 +190,7 @@ class _LoteDetailBody extends ConsumerWidget {
                         icon: Icons.calendar_month,
                         iconColor: AppColors.weight,
                         firstText: 'Fecha de entrega: ',
-                        secondText: DateFormat(
-                          'dd/MM/yyyy HH:mm',
-                        ).format(fechaEntrega),
+                        secondText: _entregaDateFormat.format(fechaEntrega),
                       ),
                       const SizedBox(height: AppSpacing.small),
                       CustomRichText(
@@ -157,6 +209,7 @@ class _LoteDetailBody extends ConsumerWidget {
                 );
                 if (entry3 == null) return const SizedBox.shrink();
                 return Column(
+                  key: ValueKey(load2.id),
                   children: [
                     const SizedBox(height: AppSpacing.small),
                     _BodegaCard(
@@ -199,7 +252,7 @@ class _BodegaCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                IconDecoration(
+                const IconDecoration(
                   icon: Icons.warehouse,
                   iconColor: AppColors.register,
                   backgroundColor: AppColors.register,
@@ -217,16 +270,12 @@ class _BodegaCard extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
+          const Padding(
+            padding: EdgeInsets.symmetric(
               horizontal: AppSpacing.small,
               vertical: AppSpacing.xSmall,
             ),
-            child: Divider(
-              height: 1,
-              thickness: 1,
-              color: AppColors.secondaryDarkPanela.withAlpha(45),
-            ),
+            child: Divider(height: 1, thickness: 1, color: _dividerColor),
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -239,7 +288,7 @@ class _BodegaCard extends StatelessWidget {
                 CustomRichText(
                   icon: Icons.calendar_month,
                   firstText: 'Fecha pesaje: ',
-                  secondText: DateFormat.yMd().format(entry3.date),
+                  secondText: _pesajeDateFormat.format(entry3.date),
                 ),
                 const SizedBox(height: AppSpacing.xSmall),
                 CustomRichText(

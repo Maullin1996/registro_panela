@@ -9,6 +9,7 @@ import 'package:registro_panela/features/stage2_load/presentation/providers/prov
 import 'package:registro_panela/features/stage3_weigh/presentation/providers/stage3_form_provider.dart';
 import 'package:registro_panela/features/stage3_weigh/presentation/providers/sync_stage3_loads_provider.dart';
 import 'package:registro_panela/core/theme/utils/tokens.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 import 'web_stage3_load_form.dart';
 import '../../../shared/web_layout.dart';
 
@@ -66,23 +67,39 @@ class WebStage3FormPage extends ConsumerWidget {
         children: [
           // ── Header ────────────────────────────────────────────
           Container(
+            margin: const EdgeInsets.fromLTRB(
+              AppSpacing.small,
+              AppSpacing.small,
+              AppSpacing.small,
+              0,
+            ),
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.medium,
               vertical: AppSpacing.small,
             ),
             decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              border: Border(
-                bottom: BorderSide(
-                  color: AppColors.secondaryDarkPanela.withAlpha(30),
+              color: AppColors.secondaryDarkPanela,
+              borderRadius: BorderRadius.circular(AppRadius.extraLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.textDark.withAlpha(20),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
                 ),
-              ),
+              ],
             ),
             child: Row(
               children: [
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_rounded),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: IconDecoration(
+                      icon: Icons.arrow_back_ios_new,
+                      iconColor: AppColors.accentLightPanela,
+                      backgroundColor: AppColors.backgroundCrema,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: AppSpacing.xSmall),
                 Text(
@@ -90,7 +107,7 @@ class WebStage3FormPage extends ConsumerWidget {
                       ? 'Registrar pesaje'.toUpperCase()
                       : 'Editar pesaje'.toUpperCase(),
                   style: textTheme.headlineMedium?.copyWith(
-                    color: AppColors.primaryPanelaBrown,
+                    color: AppColors.textLight,
                   ),
                 ),
               ],

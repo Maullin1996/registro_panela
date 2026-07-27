@@ -63,7 +63,16 @@ class Stage2Page extends ConsumerWidget {
           style: textTheme.headlineMedium,
         ),
         centerTitle: true,
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         bottom: true,

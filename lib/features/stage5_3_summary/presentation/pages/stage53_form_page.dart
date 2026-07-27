@@ -4,15 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:registro_panela/core/services/custom_snack_bar.dart';
+import 'package:registro_panela/core/theme/utils/colors.dart';
 import 'package:registro_panela/features/stage5_2_records/domain/entities/stage52_record_data.dart';
 import 'package:registro_panela/features/stage5_2_records/presentation/providers/providers.dart';
 import 'package:registro_panela/core/theme/utils/spacing.dart';
 import 'package:registro_panela/features/stage5_3_summary/presentation/pages/stage53_load_form.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 
-class Stage52FormPage extends ConsumerWidget {
+class Stage53FormPage extends ConsumerWidget {
   final String projectId;
   final String? id;
-  const Stage52FormPage({super.key, required this.projectId, this.id});
+  const Stage53FormPage({super.key, required this.projectId, this.id});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,6 +50,16 @@ class Stage52FormPage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          leading: Padding(
+            padding: const EdgeInsets.all(12),
+            child: GestureDetector(
+              onTap: () => context.pop(),
+              child: IconDecoration(
+                icon: Icons.arrow_back_ios_new,
+                iconColor: AppColors.secondaryDarkPanela,
+              ),
+            ),
+          ),
           title: Text(
             id == null
                 ? 'Nuevo registro de panela'

@@ -41,7 +41,16 @@ class MobileMoliendaPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundCrema,
       appBar: AppBar(
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
         title: Text('Moliendas', style: textTheme.headlineMedium),
       ),
       floatingActionButton: FloatingActionButton(

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:registro_panela/shared/widgets/icon_decoration.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:registro_panela/core/services/custom_snack_bar.dart';
@@ -165,7 +166,16 @@ class _Stage4PageState extends ConsumerState<Stage4Page>
   PreferredSizeWidget _buildAppBar(BuildContext context, String title) {
     final textTheme = TextTheme.of(context);
     return AppBar(
-      leading: BackButton(onPressed: () => context.pop()),
+      leading: Padding(
+        padding: const EdgeInsets.all(12),
+        child: GestureDetector(
+          onTap: () => context.pop(),
+          child: IconDecoration(
+            icon: Icons.arrow_back_ios_new,
+            iconColor: AppColors.secondaryDarkPanela,
+          ),
+        ),
+      ),
       title: Text(title.toUpperCase(), style: textTheme.headlineMedium),
     );
   }

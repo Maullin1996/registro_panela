@@ -44,7 +44,16 @@ class Stage3Page extends ConsumerWidget {
           'PESAJE: ${project.name.toUpperCase()}',
           style: textTheme.headlineMedium,
         ),
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: Padding(
+          padding: const EdgeInsets.all(12),
+          child: GestureDetector(
+            onTap: () => context.pop(),
+            child: IconDecoration(
+              icon: Icons.arrow_back_ios_new,
+              iconColor: AppColors.secondaryDarkPanela,
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         bottom: true,
